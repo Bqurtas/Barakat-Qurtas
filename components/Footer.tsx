@@ -1,27 +1,38 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Instagram, Linkedin, Mail, Phone, ArrowUpRight, Youtube, Facebook, Twitter } from 'lucide-react';
+import { Instagram, Linkedin, Mail, Phone, ArrowUpRight, Youtube, Facebook, Twitter, Music, Palette, Globe, Ghost, MessageCircle } from 'lucide-react';
 import { Theme } from '../types';
 
 interface FooterProps {
   theme: Theme;
+  setActiveRoom: (room: 'home' | 'about' | 'contact') => void;
 }
 
-const Footer: React.FC<FooterProps> = ({ theme }) => {
+const Footer: React.FC<FooterProps> = ({ theme, setActiveRoom }) => {
   const socialLinks = [
     { icon: <Instagram size={18} />, url: 'https://instagram.com/Bqurtas' },
     { icon: <Linkedin size={18} />, url: 'https://linkedin.com/in/Bqurtas' },
     { icon: <Twitter size={18} />, url: 'https://twitter.com/Bqurtas' },
     { icon: <Facebook size={18} />, url: 'https://facebook.com/Bqurtas' },
     { icon: <Youtube size={18} />, url: 'https://youtube.com/@Bqurtas' },
+    { icon: <Palette size={18} />, url: 'https://behance.net/Bqurtas' },
+    { icon: <Globe size={18} />, url: 'https://dribbble.com/Bqurtas' },
+    { icon: <Music size={18} />, url: 'https://tiktok.com/@Bqurtas' },
+    { icon: <Ghost size={18} />, url: 'https://snapchat.com/add/Bqurtas' },
+    { icon: <MessageCircle size={18} />, url: 'https://wa.me/9647517884985' },
   ];
 
   const bgColor = theme === Theme.DARK ? 'bg-[#0a0f14]' : 'bg-[#f8fafc]';
   const borderColor = theme === Theme.DARK ? 'border-slate-800/60' : 'border-blue-100/80';
 
+  const navigateTo = (room: 'home' | 'about' | 'contact') => {
+    setActiveRoom(room);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <footer id="contact" className={`relative pt-32 pb-12 overflow-hidden transition-colors duration-1000 ${bgColor}`}>
+    <footer id="footer" className={`relative pt-32 pb-12 overflow-hidden transition-colors duration-1000 ${bgColor}`}>
       <div className="container mx-auto px-6 max-w-6xl relative z-10">
         <div className="flex flex-col gap-24">
           
@@ -33,17 +44,17 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
               </h2>
               
               <div className="space-y-6 pt-4">
-                <a href="mailto:contact@bqurtas.com" className="group flex items-center gap-6 w-fit">
+                <a href="mailto:Bqurtas@gmail.com" className="group flex items-center gap-6 w-fit">
                   <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 border ${borderColor} group-hover:bg-blue-600 group-hover:text-white group-hover:border-transparent`}>
                     <Mail size={18} />
                   </div>
-                  <p className="font-simple text-sm font-bold tracking-wider">contact@bqurtas.com</p>
+                  <p className="font-simple text-sm font-bold tracking-wider">Bqurtas@gmail.com</p>
                 </a>
-                <a href="tel:+964700000000" className="group flex items-center gap-6 w-fit">
+                <a href="tel:009647517884985" className="group flex items-center gap-6 w-fit">
                   <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 border ${borderColor} group-hover:bg-blue-600 group-hover:text-white group-hover:border-transparent`}>
                     <Phone size={18} />
                   </div>
-                  <p className="font-simple text-sm font-bold tracking-wider">+964 7XX XXX XXXX</p>
+                  <p className="font-simple text-sm font-bold tracking-wider">00964 751 788 49 85</p>
                 </a>
               </div>
             </div>
@@ -52,18 +63,25 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
               <div className="space-y-8">
                 <h4 className="font-simple text-[9px] font-black uppercase tracking-[0.5em] opacity-30">Navigate</h4>
                 <ul className="space-y-4">
-                  {['Design', 'About', 'Contact'].map((item) => (
-                    <li key={item}>
-                      <a href={`#${item.toLowerCase()}`} className="font-simple text-xs font-bold hover:text-blue-600 transition-colors flex items-center gap-2 group">
-                        {item} <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </a>
+                  {[
+                    { name: 'Works', id: 'home' },
+                    { name: 'About', id: 'about' },
+                    { name: 'Contact', id: 'contact' }
+                  ].map((item) => (
+                    <li key={item.id}>
+                      <button 
+                        onClick={() => navigateTo(item.id as any)} 
+                        className="font-simple text-xs font-bold hover:text-blue-600 transition-colors flex items-center gap-2 group text-left"
+                      >
+                        {item.name} <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </button>
                     </li>
                   ))}
                 </ul>
               </div>
               <div className="space-y-8">
-                <h4 className="font-simple text-[9px] font-black uppercase tracking-[0.5em] opacity-30">Socials</h4>
-                <div className="flex flex-wrap gap-3">
+                <h4 className="font-simple text-[9px] font-black uppercase tracking-[0.5em] opacity-30">Social Landscape</h4>
+                <div className="flex flex-wrap gap-2 md:gap-3">
                   {socialLinks.map((link, idx) => (
                     <motion.a 
                       key={idx}
@@ -83,7 +101,7 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
 
           <div className={`pt-12 border-t ${borderColor} flex flex-col md:flex-row items-center justify-between gap-10`}>
             <div className="flex items-center gap-6">
-               <h3 className="font-liana text-4xl text-blue-600">Barakat Qurtas</h3>
+               <h3 className="font-liana text-5xl text-blue-600 cursor-pointer" onClick={() => navigateTo('home')}>Bqurtas</h3>
                <div className={`h-8 w-[1px] ${borderColor}`} />
                <p className="font-simple text-[8px] font-black tracking-[0.3em] uppercase opacity-30">Visual Architect</p>
             </div>

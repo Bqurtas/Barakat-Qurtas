@@ -12,16 +12,16 @@ import Footer from './components/Footer';
 import CustomCursor from './components/CustomCursor';
 import AboutRoom from './components/AboutRoom';
 import ContactRoom from './components/ContactRoom';
+import ScrollToTop from './components/ScrollToTop';
 import { Theme } from './types';
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  // Default theme is strictly DARK
   const [theme, setTheme] = useState<Theme>(Theme.DARK); 
   const [activeRoom, setActiveRoom] = useState<'home' | 'about' | 'contact'>('home');
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2500);
+    const timer = setTimeout(() => setLoading(false), 4200);
     return () => clearTimeout(timer);
   }, []);
 
@@ -38,6 +38,7 @@ const App: React.FC = () => {
       {!loading && (
         <>
           <CustomCursor theme={theme} />
+          <ScrollToTop theme={theme} />
           <Navbar theme={theme} toggleTheme={toggleTheme} setActiveRoom={setActiveRoom} activeRoom={activeRoom} />
           
           <div className="flex-grow">
@@ -48,7 +49,7 @@ const App: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.6 }}
+                  transition={{ duration: 1.2, ease: "easeOut" }}
                 >
                   <main className="relative z-10">
                     <Hero theme={theme} />
@@ -88,7 +89,7 @@ const App: React.FC = () => {
             </AnimatePresence>
           </div>
           
-          <Footer theme={theme} />
+          <Footer theme={theme} setActiveRoom={setActiveRoom} />
         </>
       )}
     </div>

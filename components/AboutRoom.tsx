@@ -35,20 +35,17 @@ const AboutRoom: React.FC<AboutRoomProps> = ({ theme, onBack }) => {
         </motion.button>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-          {/* LEFT: Imagery & Stats */}
           <div className="lg:col-span-4 space-y-12">
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 1 }}
               className={`relative aspect-[3/4] rounded-[60px] overflow-hidden border border-blue-500/10 shadow-2xl ${theme === Theme.DARK ? 'bg-slate-900' : 'bg-blue-50/20'}`}
             >
               <img 
-                src="https://uvpdlkyfzvbwvkvm.public.blob.vercel-storage.com/image-766t5fclS8rG6n67oR0o4I74zBvA3w.png" 
-                alt="Barakat Portrait" 
-                crossOrigin="anonymous"
-                className="w-full h-full object-cover object-top opacity-0 transition-opacity duration-1000"
-                onLoad={(e) => (e.currentTarget.style.opacity = '1')}
+                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=800" 
+                alt="Portrait of Designer" 
+                className="w-full h-full object-cover grayscale brightness-90 transition-all duration-1000"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-transparent pointer-events-none" />
             </motion.div>
@@ -69,7 +66,6 @@ const AboutRoom: React.FC<AboutRoomProps> = ({ theme, onBack }) => {
             </div>
           </div>
 
-          {/* RIGHT: Detailed Narrative */}
           <div className="lg:col-span-8">
             <motion.div
               initial={{ y: 30, opacity: 0 }}
@@ -89,7 +85,7 @@ const AboutRoom: React.FC<AboutRoomProps> = ({ theme, onBack }) => {
 
               <div className={`space-y-8 font-simple text-sm md:text-base leading-relaxed ${subTextColor}`}>
                 <p>
-                  I am Barakat Qartas, I was born in 1997 in Soran, I graduated from high school in Soran, and I have been living in Erbil for many years. Although I was visiting Erbil early, but life in Erbil and getting to know different cultures closely has a different enjoyment relationship. In the evening, the mountains used to be our rest, but now in Erbil, the colorful view of magical evenings is our rest.
+                  I am Barakat Qartas, a visual architect based in Erbil. Life in Erbil and getting to know different cultures closely has a different enjoyment relationship. In the evening, the colorful view of magical evenings is our rest.
                 </p>
                 
                 <div className="flex items-start gap-6 py-6">
@@ -97,13 +93,9 @@ const AboutRoom: React.FC<AboutRoomProps> = ({ theme, onBack }) => {
                      <Sparkles size={24} />
                    </div>
                    <p>
-                    Since childhood, I had a passion for graphic design and typography. I've been trying to design with Microsoft Word since I was 12 years old. But at the age of seventeen, I found myself completely immersed in the profession of graphic design. I am 25 years old and do a good level graphic design and my work bears witness to my words.
+                    Since childhood, I had a passion for graphic design and typography. I am 25 years old and do a good level graphic design and my work bears witness to my words.
                    </p>
                 </div>
-
-                <p>
-                  I hold a number of separate, intermediate and Graphic Design Masterclass certificates - Learn GREAT Design in the field of graphic design. I work in many different places, I have worked with a lot of people at a high level, and I am always proud of the two places I have worked in, which are the <strong>Kurdistan Region Presidency</strong> and the <strong>Kurdistan Regional Government-Protocol</strong>.
-                </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-8 border-y border-blue-500/10">
                   <div className="space-y-3">
@@ -122,10 +114,6 @@ const AboutRoom: React.FC<AboutRoomProps> = ({ theme, onBack }) => {
                   </div>
                 </div>
 
-                <p>
-                  My hobbies are (traveling, reading books, graphic design, law, sports and the importance of cleanliness and respect). I would like to be able to use my work more and dream of owning a big advertising and publishing company in the future.
-                </p>
-
                 <div className="pt-10 flex flex-col gap-2">
                   <span className={`font-liana text-3xl text-blue-600`}>Barakat Qurtas</span>
                   <span className={`font-simple text-[10px] font-black uppercase tracking-[0.5em] opacity-40`}>Graphic Designer</span>
@@ -136,9 +124,7 @@ const AboutRoom: React.FC<AboutRoomProps> = ({ theme, onBack }) => {
         </div>
       </div>
 
-      {/* Background Decor */}
       <div className="absolute top-0 right-0 w-1/3 h-1/2 bg-blue-600/5 blur-[120px] rounded-full pointer-events-none -z-10" />
-      <div className="absolute bottom-0 left-0 w-1/4 h-1/3 bg-blue-600/5 blur-[120px] rounded-full pointer-events-none -z-10" />
     </motion.div>
   );
 };

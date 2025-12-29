@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { Sun, Moon, Instagram, Linkedin, Twitter, Facebook, Menu, X, Youtube } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sun, Moon, Instagram, Linkedin, Twitter, X, Menu, Facebook, Youtube, Music, Palette, Globe, Ghost, MessageCircle } from 'lucide-react';
 import { Theme } from '../types';
 
 interface NavbarProps {
@@ -13,272 +13,221 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, activeRoom }) => {
   const [scrolled, setScrolled] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 80);
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navItems = [
-    { name: 'Design', id: 'home', subtitle: 'Visual Works' },
-    { name: 'About', id: 'about', subtitle: 'Biography' },
-    { name: 'Contact', id: 'contact', subtitle: 'Get In Touch' }
+    { name: 'Design', id: 'home' },
+    { name: 'About', id: 'about' },
+    { name: 'Contact', id: 'contact' }
   ];
 
   const socialLinks = [
-    { icon: <Instagram size={20} />, url: 'https://instagram.com/Bqurtas' },
-    { icon: <Linkedin size={20} />, url: 'https://linkedin.com/in/Bqurtas' },
-    { icon: <Twitter size={20} />, url: 'https://twitter.com/Bqurtas' },
-    { icon: <Facebook size={20} />, url: 'https://facebook.com/Bqurtas' },
-    { icon: <Youtube size={20} />, url: 'https://youtube.com/@Bqurtas' },
+    { icon: <Instagram size={18} />, url: 'https://instagram.com/Bqurtas', label: 'Instagram' },
+    { icon: <Linkedin size={18} />, url: 'https://linkedin.com/in/Bqurtas', label: 'LinkedIn' },
+    { icon: <Twitter size={18} />, url: 'https://twitter.com/Bqurtas', label: 'X' },
+    { icon: <Facebook size={18} />, url: 'https://facebook.com/Bqurtas', label: 'Facebook' },
+    { icon: <Youtube size={18} />, url: 'https://youtube.com/@Bqurtas', label: 'YouTube' },
+    { icon: <Palette size={18} />, url: 'https://behance.net/Bqurtas', label: 'Behance' },
+    { icon: <Globe size={18} />, url: 'https://dribbble.com/Bqurtas', label: 'Dribbble' },
+    { icon: <Music size={18} />, url: 'https://tiktok.com/@Bqurtas', label: 'TikTok' },
   ];
 
-  const accentColor = theme === Theme.DARK ? 'text-blue-300' : 'text-blue-600';
-  const bgColor = theme === Theme.DARK ? 'bg-slate-900/90 border-slate-700/50 shadow-black/40' : 'bg-white/90 border-blue-100/50 shadow-blue-900/5';
-  const dividerColor = theme === Theme.DARK ? 'bg-slate-700' : 'bg-blue-100';
+  const isDark = theme === Theme.DARK;
 
-  const menuVariants: Variants = {
+  const curtainVariants = {
     closed: { 
-      opacity: 0,
-      clipPath: "circle(0% at 90% 10%)",
-      transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] as const }
+      y: '-100%',
+      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
     },
     open: { 
-      opacity: 1,
-      clipPath: "circle(150% at 90% 10%)",
-      transition: { duration: 1, ease: [0.76, 0, 0.24, 1] as const }
+      y: '0%',
+      transition: { duration: 1, ease: [0.16, 1, 0.3, 1] }
     }
   };
 
-  const containerVariants: Variants = {
-    open: {
-      transition: { staggerChildren: 0.1, delayChildren: 0.3 }
-    }
-  };
-
-  const itemVariants: Variants = {
-    closed: { y: 50, opacity: 0, rotate: 2 },
-    open: { 
-      y: 0, 
-      opacity: 1, 
-      rotate: 0,
-      transition: { duration: 0.8, ease: [0.33, 1, 0.68, 1] as const }
-    }
-  };
-
-  const handleNavClick = (id: string) => {
-    setActiveRoom(id as any);
-    setIsOpen(false);
+  const handleLogoClick = () => {
+    setActiveRoom('home');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleProfileClick = () => {
+    setActiveRoom('home');
+    setTimeout(() => {
+      const designSection = document.getElementById('design');
+      if (designSection) {
+        designSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
   };
 
   return (
     <>
-      <nav className="fixed top-8 left-0 w-full z-[80] flex justify-center pointer-events-none px-4">
+      <nav className="fixed top-8 left-0 w-full z-[80] flex justify-center pointer-events-none px-4 md:px-6">
         <motion.div
           layout
-          initial={false}
-          animate={{
-            padding: scrolled ? '10px 18px' : '10px 24px',
-            gap: scrolled ? '18px' : '28px',
-            maxWidth: scrolled ? '340px' : '1100px',
-            scale: scrolled ? 1.05 : 1,
+          initial={{ y: -50, opacity: 0 }}
+          animate={{ 
+            y: 0, 
+            opacity: 1,
+            maxWidth: scrolled ? '540px' : '980px',
           }}
-          whileHover={{ 
-            y: -4,
-            scale: scrolled ? 1.08 : 1.02,
-            boxShadow: theme === Theme.DARK ? "0 20px 40px rgba(0,0,0,0.6)" : "0 20px 40px rgba(30,64,175,0.08)",
-            transition: { duration: 0.4, ease: [0.33, 1, 0.68, 1] as const }
-          }}
-          transition={{ type: 'spring', stiffness: 180, damping: 22 }}
-          className={`pointer-events-auto flex items-center justify-between rounded-full border shadow-2xl backdrop-blur-3xl transition-colors duration-700 ${bgColor} group overflow-hidden`}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className={`pointer-events-auto flex items-center justify-between rounded-full border border-white/10 backdrop-blur-3xl h-14 md:h-16 w-full relative px-3 md:px-6 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] ${
+            isDark ? 'bg-slate-950/80' : 'bg-white/80'
+          }`}
         >
-          {/* LEFT: Profile + Logo */}
-          <motion.div layout className="flex items-center gap-4 flex-shrink-0 h-full">
+          {/* LEFT: DYNAMIC LOGO */}
+          <div className="flex items-center gap-2 md:gap-3 overflow-hidden">
             <motion.div 
               layout
-              className={`p-0.5 rounded-full border flex items-center justify-center transition-colors overflow-hidden ${theme === Theme.DARK ? 'border-slate-700' : 'border-blue-100'}`}
+              onClick={handleProfileClick}
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              className={`flex-shrink-0 w-9 h-9 md:w-11 md:h-11 rounded-full overflow-hidden border-2 transition-colors cursor-pointer ${
+                isDark ? 'border-white/20' : 'border-slate-900/10'
+              }`}
             >
-              <motion.img 
-                layout
-                src="https://uvpdlkyfzvbwvkvm.public.blob.vercel-storage.com/image-766t5fclS8rG6n67oR0o4I74zBvA3w.png" 
+              <img 
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200" 
                 alt="Barakat Profile" 
-                className={`rounded-full object-cover transition-all duration-500 ${scrolled ? 'w-10 h-10' : 'w-11 h-11'}`}
+                className="w-full h-full object-cover grayscale brightness-110"
               />
             </motion.div>
-            <motion.span 
-              layout
-              className={`font-liana whitespace-nowrap tracking-wide leading-none transition-all duration-500 pt-1 ${accentColor} ${scrolled ? 'text-xl' : 'text-2xl'}`}
-            >
-              {scrolled ? 'Bqurtas' : 'Barakat Qurtas'}
-            </motion.span>
-          </motion.div>
+            
+            <motion.div layout onClick={handleLogoClick} className="flex flex-col -gap-1 min-w-0 cursor-pointer">
+              <motion.span 
+                layout
+                className={`font-liana text-lg md:text-3xl leading-none transition-colors truncate ${isDark ? 'text-blue-500' : 'text-blue-600'}`}
+              >
+                {scrolled ? 'Bqurtas' : 'Barakat Qurtas'}
+              </motion.span>
+              <motion.span 
+                layout
+                className={`font-simple text-[6px] md:text-[8px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] opacity-40 ml-0.5 md:ml-1 ${isDark ? 'text-white' : 'text-slate-900'}`}
+              >
+                {scrolled ? 'Designer' : 'Graphic Designer'}
+              </motion.span>
+            </motion.div>
+          </div>
 
-          {/* RIGHT: Socials + Toggle */}
-          {!scrolled && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="flex items-center gap-5 h-full"
+          {/* RIGHT: TOOLS & SOCIALS */}
+          <div className="flex items-center gap-1 md:gap-3 flex-shrink-0">
+            <div className="hidden lg:flex items-center gap-1">
+              {socialLinks.slice(0, 5).map((link, idx) => (
+                <motion.a 
+                  key={idx}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -4, scale: 1.1, color: '#2563eb' }}
+                  className={`p-2 transition-all opacity-40 ${isDark ? 'text-white' : 'text-slate-900'}`}
+                  title={link.label}
+                >
+                  {link.icon}
+                </motion.a>
+              ))}
+              <div className={`w-[1px] h-6 mx-1 ${isDark ? 'bg-white/10' : 'bg-slate-950/10'}`} />
+            </div>
+
+            <motion.button 
+              layout
+              onClick={toggleTheme}
+              whileHover={{ scale: 1.1, backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' }}
+              className={`flex items-center justify-center w-9 h-9 md:w-11 md:h-11 transition-all rounded-xl border ${
+                isDark ? 'border-white/5 text-white' : 'border-slate-950/5 text-slate-950'
+              }`}
             >
-              <div className="flex items-center gap-4">
+              {isDark ? <Sun size={14} /> : <Moon size={14} />}
+            </motion.button>
+
+            <motion.button
+              layout
+              onClick={() => setIsMenuOpen(true)}
+              whileHover={{ scale: 1.05, backgroundColor: '#2563eb', color: '#fff' }}
+              whileTap={{ scale: 0.95 }}
+              className={`flex items-center justify-center w-9 h-9 md:w-11 md:h-11 transition-all rounded-xl shadow-lg ${
+                isDark ? 'bg-white text-slate-950' : 'bg-slate-950 text-white'
+              }`}
+            >
+              <Menu size={16} md:size={18} strokeWidth={2.5} />
+            </motion.button>
+          </div>
+        </motion.div>
+      </nav>
+
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            variants={curtainVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+            className={`fixed inset-0 z-[100] flex flex-col items-center justify-center backdrop-blur-3xl ${
+              isDark ? 'bg-slate-950/98' : 'bg-white/98'
+            }`}
+          >
+            <motion.button 
+              onClick={() => setIsMenuOpen(false)}
+              whileHover={{ rotate: 90, scale: 1.1, backgroundColor: '#ef4444', color: '#fff' }}
+              className={`absolute top-10 right-10 w-12 h-12 md:w-14 md:h-14 border rounded-2xl flex items-center justify-center transition-all ${
+                isDark ? 'border-white/10 text-white' : 'border-slate-900/10 text-slate-900'
+              }`}
+            >
+              <X size={24} />
+            </motion.button>
+
+            <div className="flex flex-col gap-4 md:gap-8 items-center mb-12">
+              {navItems.map((item, idx) => (
+                <motion.button
+                  key={item.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 + idx * 0.1 }}
+                  onClick={() => {
+                    setActiveRoom(item.id as any);
+                    setIsMenuOpen(false);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="group relative"
+                >
+                  <span className={`font-simple text-5xl md:text-8xl font-black uppercase tracking-tighter transition-all duration-500 inline-block group-hover:text-blue-600 group-hover:italic ${
+                    (activeRoom === item.id || (activeRoom === 'home' && item.id === 'home')) ? 'text-blue-600' : (isDark ? 'text-white' : 'text-slate-900')
+                  }`}>
+                    {item.name === 'Design' ? 'Works' : item.name}
+                  </span>
+                </motion.button>
+              ))}
+            </div>
+
+            <div className="flex flex-col items-center gap-8">
+              <div className="flex flex-col items-center">
+                <span className="font-liana text-3xl text-blue-600">Barakat Qurtas</span>
+                <span className={`font-simple text-[8px] font-black uppercase tracking-[0.5em] opacity-30 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Graphic Designer
+                </span>
+              </div>
+              
+              <div className="flex flex-wrap justify-center gap-4 max-w-sm px-6">
                 {socialLinks.map((link, idx) => (
                   <motion.a 
-                    key={idx}
+                    key={idx} 
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    whileHover={{ scale: 1.3, y: -3, rotate: 8 }}
-                    className={`transition-colors ${theme === Theme.DARK ? 'text-slate-400 hover:text-blue-300' : 'text-slate-500 hover:text-blue-600'}`}
+                    whileHover={{ y: -8, scale: 1.2, color: '#2563eb', backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)' }}
+                    className={`p-4 rounded-2xl transition-all opacity-50 hover:opacity-100 ${isDark ? 'text-white' : 'text-slate-900'}`}
+                    title={link.label}
                   >
                     {link.icon}
                   </motion.a>
                 ))}
               </div>
-
-              <motion.div layout className={`h-8 w-[1px] ${dividerColor}`} />
-
-              <motion.button 
-                onClick={toggleTheme}
-                whileHover={{ scale: 1.2, rotate: 180 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                className={`p-2 rounded-full transition-all flex items-center justify-center hover:bg-blue-500/10 ${accentColor}`}
-              >
-                {theme === Theme.DARK ? <Sun size={20} /> : <Moon size={20} />}
-              </motion.button>
-              
-              <motion.div layout className={`h-8 w-[1px] ${dividerColor}`} />
-            </motion.div>
-          )}
-
-          <motion.button 
-            layout
-            onClick={() => setIsOpen(true)}
-            whileHover={{ 
-              scale: 1.1,
-              borderRadius: "14px",
-              boxShadow: "0 0 30px rgba(59, 130, 246, 0.5)",
-            }}
-            whileTap={{ scale: 0.9 }}
-            className={`flex items-center justify-center rounded-[18px] transition-all flex-shrink-0 relative overflow-hidden ${
-              scrolled ? 'w-11 h-11' : 'w-12 h-12'
-            } ${
-              theme === Theme.DARK ? 'bg-slate-800 text-blue-300' : 'bg-blue-50 text-blue-600 border border-blue-100 shadow-sm'
-            }`}
-          >
-            <Menu size={scrolled ? 22 : 24} />
-          </motion.button>
-        </motion.div>
-      </nav>
-
-      {/* Full Screen Menu Overlay - Classy Styling */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            variants={menuVariants}
-            initial="closed"
-            animate="open"
-            exit="closed"
-            className={`fixed inset-0 z-[100] flex flex-col items-center justify-center backdrop-blur-3xl overflow-hidden ${
-              theme === Theme.DARK ? 'bg-slate-900/60' : 'bg-blue-50/60'
-            }`}
-          >
-            {/* Subtle Texture Overlay */}
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] blend-overlay" />
-            
-            <motion.button 
-              onClick={() => setIsOpen(false)}
-              whileHover={{ rotate: 90, scale: 1.1, backgroundColor: 'rgba(59, 130, 246, 0.1)' }}
-              whileTap={{ scale: 0.9 }}
-              className={`absolute top-10 right-10 p-6 rounded-full border opacity-20 hover:opacity-100 transition-all z-[110] ${theme === Theme.DARK ? 'border-white text-white' : 'border-blue-900 text-blue-900'}`}
-            >
-              <X size={32} strokeWidth={1.5} />
-            </motion.button>
-
-            <div className="container mx-auto px-6 h-full flex flex-col justify-between py-24 relative z-10">
-              <div className="flex-grow flex flex-col items-center justify-center">
-                <motion.div 
-                  variants={containerVariants}
-                  className="flex flex-col gap-8 md:gap-12 items-center"
-                >
-                  {navItems.map((item) => (
-                    <motion.div
-                      key={item.id}
-                      variants={itemVariants}
-                      className="group relative"
-                    >
-                      <button
-                        onClick={() => handleNavClick(item.id)}
-                        className="relative block"
-                      >
-                        <div className="flex flex-col items-center px-10">
-                          <span className={`font-simple text-[10px] font-black tracking-[0.6em] uppercase mb-2 opacity-0 group-hover:opacity-60 transition-all duration-500 translate-y-3 group-hover:translate-y-0 ${theme === Theme.DARK ? 'text-blue-300' : 'text-blue-600'}`}>
-                            {item.subtitle}
-                          </span>
-                          <span className={`font-simple text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter transition-all duration-700 group-hover:italic group-hover:text-blue-600 group-hover:scale-105 inline-block origin-center ${theme === Theme.DARK ? 'text-white' : 'text-blue-900'}`}>
-                            {item.name}
-                          </span>
-                        </div>
-                        <motion.div 
-                          className="h-[2px] bg-blue-600 absolute bottom-0 left-1/2 -translate-x-1/2"
-                          initial={{ width: 0 }}
-                          whileHover={{ width: '80%' }}
-                          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
-                        />
-                      </button>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </div>
-
-              {/* Bottom Socials in Overlay */}
-              <motion.div 
-                variants={itemVariants}
-                className="flex flex-col items-center gap-10"
-              >
-                <div className={`h-[1px] w-24 ${theme === Theme.DARK ? 'bg-white/10' : 'bg-blue-900/10'}`} />
-                
-                <div className="flex items-center gap-8 md:gap-12">
-                  {socialLinks.map((link, idx) => (
-                    <motion.a 
-                      key={idx}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      whileHover={{ y: -8, scale: 1.2, color: '#2563eb' }}
-                      className={`transition-all duration-500 ${theme === Theme.DARK ? 'text-slate-500' : 'text-slate-400'}`}
-                    >
-                      {link.icon}
-                    </motion.a>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <span className={`font-liana text-2xl ${accentColor}`}>Barakat Qurtas</span>
-                </div>
-              </motion.div>
             </div>
-
-            {/* Decorative Background Glows */}
-            <motion.div 
-              animate={{ 
-                scale: [1, 1.3, 1],
-                opacity: [0.1, 0.2, 0.1]
-              }}
-              transition={{ duration: 12, repeat: Infinity }}
-              className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-500/15 blur-[120px] pointer-events-none" 
-            />
-            <motion.div 
-              animate={{ 
-                scale: [1.2, 1, 1.2],
-                opacity: [0.05, 0.15, 0.05]
-              }}
-              transition={{ duration: 15, repeat: Infinity, delay: 2 }}
-              className="absolute -bottom-[5%] -right-[5%] w-[40%] h-[40%] rounded-full bg-indigo-500/10 blur-[120px] pointer-events-none" 
-            />
           </motion.div>
         )}
       </AnimatePresence>

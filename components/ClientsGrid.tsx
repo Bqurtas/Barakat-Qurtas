@@ -8,18 +8,36 @@ interface ClientsGridProps {
 }
 
 const ClientsGrid: React.FC<ClientsGridProps> = ({ theme }) => {
-  // 18 distinct high-quality placeholder logos
-  const clients = Array.from({ length: 18 }).map((_, i) => {
-    const iconIds = [204, 218, 313, 322, 213, 242, 215, 230, 245, 250, 260, 270, 280, 290, 300, 310, 320, 330];
-    return {
-      id: i,
-      name: `Partner ${i + 1}`,
-      logo: `https://cdn-icons-png.flaticon.com/512/5968/5968${iconIds[i] || 204}.png`
-    };
-  });
+  const logos = [
+    'https://cdn-icons-png.flaticon.com/512/5968/5968204.png',
+    'https://cdn-icons-png.flaticon.com/512/5968/5968218.png',
+    'https://cdn-icons-png.flaticon.com/512/5968/5968313.png',
+    'https://cdn-icons-png.flaticon.com/512/5968/5968322.png',
+    'https://cdn-icons-png.flaticon.com/512/5968/5968213.png',
+    'https://cdn-icons-png.flaticon.com/512/5968/5968242.png',
+    'https://cdn-icons-png.flaticon.com/512/882/882731.png',
+    'https://cdn-icons-png.flaticon.com/512/732/732221.png',
+    'https://cdn-icons-png.flaticon.com/512/732/732190.png',
+    'https://cdn-icons-png.flaticon.com/512/732/732229.png',
+    'https://cdn-icons-png.flaticon.com/512/732/732205.png',
+    'https://cdn-icons-png.flaticon.com/512/732/732228.png',
+    'https://cdn-icons-png.flaticon.com/512/5968/5968263.png',
+    'https://cdn-icons-png.flaticon.com/512/5968/5968252.png',
+    'https://cdn-icons-png.flaticon.com/512/5968/5968334.png',
+    'https://cdn-icons-png.flaticon.com/512/5968/5968235.png',
+    'https://cdn-icons-png.flaticon.com/512/5968/5968249.png',
+    'https://cdn-icons-png.flaticon.com/512/5968/5968222.png',
+  ];
 
-  const sectionTitleColor = theme === Theme.DARK ? 'text-blue-400/50' : 'text-blue-600/40';
-  const headingColor = theme === Theme.DARK ? 'text-slate-100' : 'text-slate-900';
+  const clients = logos.map((logo, i) => ({
+    id: i,
+    name: `Partner ${i + 1}`,
+    logo: logo
+  }));
+
+  const isDark = theme === Theme.DARK;
+  const sectionTitleColor = isDark ? 'text-blue-400/50' : 'text-blue-600/40';
+  const headingColor = isDark ? 'text-slate-100' : 'text-slate-900';
 
   return (
     <section className="py-24 px-4 overflow-hidden">
@@ -50,7 +68,7 @@ const ClientsGrid: React.FC<ClientsGridProps> = ({ theme }) => {
           />
         </div>
 
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-6">
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-6 md:gap-8">
           {clients.map((client, idx) => (
             <motion.div
               key={client.id}
@@ -58,20 +76,21 @@ const ClientsGrid: React.FC<ClientsGridProps> = ({ theme }) => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: (idx % 6) * 0.05, duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
               viewport={{ once: true }}
-              className={`aspect-square rounded-[40px] flex items-center justify-center p-8 transition-all duration-700 border group relative overflow-hidden ${
-                theme === Theme.DARK 
-                  ? 'bg-slate-900/40 border-slate-800/60 hover:border-blue-500/30' 
-                  : 'bg-white border-blue-100/60 hover:border-blue-200 shadow-sm hover:shadow-xl'
+              className={`aspect-square rounded-[35px] md:rounded-[45px] flex items-center justify-center p-6 md:p-8 transition-all duration-700 relative group overflow-hidden border backdrop-blur-3xl ${
+                isDark 
+                  ? 'bg-white/[0.02] border-white/5 hover:bg-white/[0.05] shadow-2xl' 
+                  : 'bg-slate-900/[0.02] border-slate-900/5 hover:bg-slate-900/[0.04] shadow-sm'
               }`}
             >
-              <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none ${
-                theme === Theme.DARK ? 'bg-gradient-to-br from-blue-500/5 to-transparent' : 'bg-gradient-to-br from-blue-600/5 to-transparent'
+              {/* Soft Inner Glow on Hover */}
+              <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none ${
+                isDark ? 'bg-gradient-to-br from-blue-500/10 to-transparent' : 'bg-gradient-to-br from-blue-600/5 to-transparent'
               }`} />
               
               <img 
                 src={client.logo} 
                 alt={client.name}
-                className={`w-full h-full object-contain grayscale transition-all duration-1000 group-hover:scale-110 group-hover:grayscale-0 opacity-20 group-hover:opacity-100`}
+                className={`w-full h-full object-contain grayscale transition-all duration-1000 group-hover:scale-110 group-hover:grayscale-0 opacity-15 group-hover:opacity-100`}
               />
             </motion.div>
           ))}

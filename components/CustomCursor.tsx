@@ -11,7 +11,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ theme }) => {
   const [isPointer, setIsPointer] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   
-  const springConfig = { damping: 35, stiffness: 350 };
+  const springConfig = { damping: 35, stiffness: 400 };
   const cursorX = useSpring(0, springConfig);
   const cursorY = useSpring(0, springConfig);
 
@@ -44,14 +44,13 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ theme }) => {
     };
   }, [cursorX, cursorY, isVisible]);
 
-  const pointerColor = theme === Theme.DARK ? 'rgba(147, 197, 253, 0.8)' : 'rgba(37, 99, 235, 0.8)';
-  const ringColor = theme === Theme.DARK ? 'rgba(255, 255, 255, 0.1)' : 'rgba(37, 99, 235, 0.1)';
+  const pointerColor = theme === Theme.DARK ? 'rgba(147, 197, 253, 1)' : 'rgba(37, 99, 235, 1)';
 
   if (!isVisible) return null;
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999] hidden lg:block">
-      {/* Outer Ring - Increased from w-12 h-12 to w-16 h-16 */}
+      {/* 1. CORE RING */}
       <motion.div
         style={{
           x: cursorX,
@@ -60,14 +59,15 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ theme }) => {
           translateY: '-50%',
         }}
         animate={{
-          scale: isPointer ? 1.4 : 1,
-          borderColor: isPointer ? pointerColor : ringColor,
-          borderWidth: '1.5px',
+          scale: isPointer ? 1.5 : 1,
+          borderColor: pointerColor,
+          borderWidth: isPointer ? '2px' : '1px',
           opacity: isVisible ? 1 : 0
         }}
-        className="absolute w-16 h-16 rounded-full border transition-colors duration-500"
+        className="absolute w-12 h-12 rounded-full border transition-colors duration-500 z-20"
       />
-      {/* Inner Dot - Increased from w-1.5 h-1.5 to w-2 h-2 */}
+
+      {/* 2. CENTRAL DOT */}
       <motion.div
         style={{
           x: cursorX,
@@ -80,7 +80,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ theme }) => {
           backgroundColor: pointerColor,
           opacity: isVisible ? 1 : 0
         }}
-        className="absolute w-2 h-2 rounded-full"
+        className="absolute w-2 h-2 rounded-full z-30 shadow-[0_0_10px_rgba(37,99,235,0.8)]"
       />
     </div>
   );
