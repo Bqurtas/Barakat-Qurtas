@@ -8,12 +8,15 @@ interface ClientsGridProps {
 }
 
 const ClientsGrid: React.FC<ClientsGridProps> = ({ theme }) => {
-  // Mock data for 18 partners as per request (6 per row, 3 rows)
-  const clients = Array.from({ length: 18 }).map((_, i) => ({
-    id: i,
-    name: `Partner ${i + 1}`,
-    logo: `https://cdn-icons-png.flaticon.com/512/5968/5968${200 + i > 300 ? 204 : 200 + i}.png` // Using placeholder icons for clean look
-  }));
+  // 18 distinct high-quality placeholder logos
+  const clients = Array.from({ length: 18 }).map((_, i) => {
+    const iconIds = [204, 218, 313, 322, 213, 242, 215, 230, 245, 250, 260, 270, 280, 290, 300, 310, 320, 330];
+    return {
+      id: i,
+      name: `Partner ${i + 1}`,
+      logo: `https://cdn-icons-png.flaticon.com/512/5968/5968${iconIds[i] || 204}.png`
+    };
+  });
 
   const sectionTitleColor = theme === Theme.DARK ? 'text-blue-400/50' : 'text-blue-600/40';
   const headingColor = theme === Theme.DARK ? 'text-slate-100' : 'text-slate-900';
@@ -21,14 +24,14 @@ const ClientsGrid: React.FC<ClientsGridProps> = ({ theme }) => {
   return (
     <section className="py-24 px-4 overflow-hidden">
       <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-16">
+        <div className="text-center mb-20">
           <motion.p 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className={`font-simple tracking-[0.7em] uppercase text-[9px] font-black mb-4 ${sectionTitleColor}`}
+            className={`font-simple tracking-[1em] uppercase text-[9px] font-black mb-4 ${sectionTitleColor}`}
           >
-            Network
+            Trust
           </motion.p>
           <motion.h2 
             initial={{ opacity: 0, y: 10 }}
@@ -41,38 +44,34 @@ const ClientsGrid: React.FC<ClientsGridProps> = ({ theme }) => {
           </motion.h2>
           <motion.div 
             initial={{ width: 0 }}
-            whileInView={{ width: 32 }}
+            whileInView={{ width: 40 }}
             viewport={{ once: true }}
-            className="h-[1px] bg-blue-500/30 mx-auto mt-6" 
+            className="h-[2px] bg-blue-600/30 mx-auto mt-6 rounded-full" 
           />
         </div>
 
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-5">
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-6">
           {clients.map((client, idx) => (
             <motion.div
               key={client.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              // Fixed easing array type
-              transition={{ delay: (idx % 6) * 0.05, duration: 0.7, ease: [0.22, 1, 0.36, 1] as const }}
+              transition={{ delay: (idx % 6) * 0.05, duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
               viewport={{ once: true }}
-              className={`aspect-square rounded-[32px] flex items-center justify-center p-7 transition-all duration-700 border group relative overflow-hidden ${
+              className={`aspect-square rounded-[40px] flex items-center justify-center p-8 transition-all duration-700 border group relative overflow-hidden ${
                 theme === Theme.DARK 
-                  ? 'bg-slate-900/20 border-slate-800/40 hover:bg-slate-800/60 hover:border-blue-500/30' 
-                  : 'bg-slate-100/30 border-blue-100/40 hover:bg-white hover:border-blue-200 shadow-[inset_0_1px_1px_rgba(255,255,255,0.6)] hover:shadow-[0_20px_40px_rgba(30,64,175,0.06)]'
+                  ? 'bg-slate-900/40 border-slate-800/60 hover:border-blue-500/30' 
+                  : 'bg-white border-blue-100/60 hover:border-blue-200 shadow-sm hover:shadow-xl'
               }`}
             >
-              {/* Subtle radial glow on hover */}
               <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none ${
-                theme === Theme.DARK ? 'bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.08),transparent_70%)]' : 'bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.04),transparent_70%)]'
+                theme === Theme.DARK ? 'bg-gradient-to-br from-blue-500/5 to-transparent' : 'bg-gradient-to-br from-blue-600/5 to-transparent'
               }`} />
               
               <img 
                 src={client.logo} 
                 alt={client.name}
-                className={`w-full h-full object-contain grayscale transition-all duration-1000 scale-[0.75] group-hover:scale-[0.9] group-hover:grayscale-0 ${
-                  theme === Theme.DARK ? 'opacity-20 group-hover:opacity-100' : 'opacity-30 group-hover:opacity-100'
-                }`}
+                className={`w-full h-full object-contain grayscale transition-all duration-1000 group-hover:scale-110 group-hover:grayscale-0 opacity-20 group-hover:opacity-100`}
               />
             </motion.div>
           ))}

@@ -16,11 +16,12 @@ import { Theme } from './types';
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [theme, setTheme] = useState<Theme>(Theme.DARK); // Set initial theme to DARK
+  // Default theme is strictly DARK
+  const [theme, setTheme] = useState<Theme>(Theme.DARK); 
   const [activeRoom, setActiveRoom] = useState<'home' | 'about' | 'contact'>('home');
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 3000);
+    const timer = setTimeout(() => setLoading(false), 2500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -28,13 +29,8 @@ const App: React.FC = () => {
     setTheme(prev => prev === Theme.LIGHT ? Theme.DARK : Theme.LIGHT);
   };
 
-  const colors = {
-    dark: 'bg-[#0a0f14] text-[#e2e8f0]', 
-    light: 'bg-[#f8fafc] text-[#1e293b]', 
-  };
-
   return (
-    <div className={`${theme === Theme.DARK ? colors.dark : colors.light} transition-colors duration-1000 min-h-screen selection:bg-blue-600 selection:text-white flex flex-col`}>
+    <div className={`${theme === Theme.DARK ? 'bg-[#0a0f14] text-slate-100' : 'bg-[#f8fafc] text-slate-900'} transition-colors duration-1000 min-h-screen selection:bg-blue-600 selection:text-white flex flex-col font-simple`}>
       <AnimatePresence>
         {loading && <Splash />}
       </AnimatePresence>
@@ -49,12 +45,12 @@ const App: React.FC = () => {
               {activeRoom === 'home' && (
                 <motion.div
                   key="home"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.6 }}
                 >
-                  <main className="relative z-10 flex flex-col gap-0">
+                  <main className="relative z-10">
                     <Hero theme={theme} />
                     <Portfolio theme={theme} />
                     <ClientsGrid theme={theme} />
@@ -69,10 +65,10 @@ const App: React.FC = () => {
               {activeRoom === 'about' && (
                 <motion.div
                   key="about"
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  exit={{ opacity: 0, y: -30 }}
+                  transition={{ duration: 0.6 }}
                 >
                   <AboutRoom theme={theme} onBack={() => setActiveRoom('home')} />
                 </motion.div>
@@ -81,10 +77,10 @@ const App: React.FC = () => {
               {activeRoom === 'contact' && (
                 <motion.div
                   key="contact"
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  exit={{ opacity: 0, y: -30 }}
+                  transition={{ duration: 0.6 }}
                 >
                   <ContactRoom theme={theme} onBack={() => setActiveRoom('home')} />
                 </motion.div>
@@ -92,7 +88,6 @@ const App: React.FC = () => {
             </AnimatePresence>
           </div>
           
-          {/* Global Footer reachable from all views */}
           <Footer theme={theme} />
         </>
       )}
