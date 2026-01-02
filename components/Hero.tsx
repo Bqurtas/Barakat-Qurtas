@@ -10,7 +10,7 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ theme }) => {
   const [text, setText] = useState('');
-  const fullText = "DESIGN • PRINTING • ADVERTISING";
+  const fullText = "Graphic Design • Printing • Advertising";
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -60,31 +60,29 @@ const Hero: React.FC<HeroProps> = ({ theme }) => {
   return (
     <section id="hero" className="relative h-screen flex flex-col items-center justify-center overflow-hidden px-4">
       
-      {/* Background Name with soft blur entrance */}
       <motion.div 
         style={{ x: bgTextX, y: bgTextY }}
         initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
         animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-        transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
         className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0 select-none overflow-hidden"
       >
         <div className="flex flex-col items-center justify-center w-full gap-2 md:gap-4">
-          <h1 className={`font-arch text-[12vw] font-black uppercase tracking-[0.6em] md:tracking-[0.9em] leading-[0.8] opacity-[0.06] blur-[4px] md:blur-[5px] text-center w-full whitespace-nowrap translate-x-[0.3em] ${isDark ? 'text-white' : 'text-slate-900'}`}>
+          <h1 className={`font-simple text-[12vw] font-[900] uppercase tracking-[0.6em] md:tracking-[0.9em] leading-[0.8] opacity-[0.06] blur-[4px] md:blur-[5px] text-center w-full whitespace-nowrap translate-x-[0.3em] ${isDark ? 'text-white' : 'text-slate-900'}`}>
             BARAKAT
           </h1>
-          <h1 className={`font-arch text-[12vw] font-black uppercase tracking-[0.6em] md:tracking-[0.9em] leading-[0.8] opacity-[0.06] blur-[4px] md:blur-[5px] text-center w-full whitespace-nowrap translate-x-[0.3em] ${isDark ? 'text-white' : 'text-slate-900'}`}>
+          <h1 className={`font-simple text-[12vw] font-[900] uppercase tracking-[0.6em] md:tracking-[0.9em] leading-[0.8] opacity-[0.06] blur-[4px] md:blur-[5px] text-center w-full whitespace-nowrap translate-x-[0.3em] ${isDark ? 'text-white' : 'text-slate-900'}`}>
             QURTAS
           </h1>
         </div>
       </motion.div>
 
       <div className="container mx-auto flex flex-col items-center justify-center relative z-10">
-        {/* Central Portrait with persistent floating effect */}
         <motion.div
           style={{ x: portraitX, y: portraitY }}
           initial={{ opacity: 0, scale: 0.8, filter: 'blur(20px)' }}
           animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           className="relative z-10 mb-10"
         >
           <motion.div 
@@ -98,18 +96,20 @@ const Hero: React.FC<HeroProps> = ({ theme }) => {
               src="https://i.ibb.co/LdXvxY3b/B0006.png" 
               alt="Barakat Qurtas"
               className="w-full h-full object-cover scale-110"
+              loading="eager"
+              decoding="sync"
+              fetchpriority="high"
             />
           </motion.div>
           
           <div className={`absolute -inset-24 md:-inset-32 blur-[150px] -z-10 rounded-full transition-colors duration-1000 ${isDark ? 'bg-blue-600/20' : 'bg-blue-400/25'}`} />
         </motion.div>
 
-        {/* Typed Text Section */}
         <div className="text-center w-full relative z-20">
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
+            transition={{ delay: 0.5 }}
             className="flex items-center justify-center gap-3 mb-6"
           >
             <div className={`h-[1px] w-12 ${isDark ? 'bg-blue-500/30' : 'bg-blue-600/20'}`} />
@@ -117,18 +117,19 @@ const Hero: React.FC<HeroProps> = ({ theme }) => {
             <div className={`h-[1px] w-12 ${isDark ? 'bg-blue-500/30' : 'bg-blue-600/20'}`} />
           </motion.div>
           
-          <h2 className="font-simple text-[10px] md:text-[13px] font-black uppercase tracking-[1em] min-h-[1.5em] text-blue-500 text-glow">
-            {text}
-            <motion.span 
-              animate={{ opacity: [1, 0] }}
-              transition={{ duration: 0.8, repeat: Infinity }}
-              className="inline-block w-[2px] h-[1em] ml-2 bg-blue-500/70 align-middle"
-            />
-          </h2>
+          <div className="flex flex-col items-center">
+             <h2 className="font-simple text-[10px] md:text-[13px] font-black uppercase tracking-[1em] min-h-[1.5em] text-blue-500 text-glow">
+              {text}
+              <motion.span 
+                animate={{ opacity: [1, 0] }}
+                transition={{ duration: 0.8, repeat: Infinity }}
+                className="inline-block w-[2px] h-[1em] ml-2 bg-blue-500/70 align-middle"
+              />
+            </h2>
+          </div>
         </div>
       </div>
 
-      {/* Scroll Indicator */}
       <motion.div 
         animate={{ y: [0, 8, 0], opacity: [0.3, 0.6, 0.3] }}
         transition={{ duration: 3, repeat: Infinity }}

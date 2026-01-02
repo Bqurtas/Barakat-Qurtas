@@ -54,7 +54,7 @@ const ClientsGrid: React.FC<ClientsGridProps> = ({ theme }) => {
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             className="font-simple text-3xl md:text-5xl font-black uppercase tracking-tight"
           >
-            Strategic Partners
+            Worked With
           </motion.h2>
           <motion.div 
             initial={{ width: 0 }}

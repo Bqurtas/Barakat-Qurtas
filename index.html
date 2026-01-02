@@ -4,9 +4,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Barakat Qurtas | Visual Architect</title>
-    <link rel="preconnect" href="https://i.ibb.co" />
-    <link rel="preconnect" href="https://images.unsplash.com" />
+    <title>Barakat Qurtas</title>
+    <!-- Favicon / Logo for Browser Tab -->
+    <link rel="icon" type="image/png" href="https://i.ibb.co/D3h6b89/Barakat-Qurtas.png" />
+    <!-- Preload critical assets for rocket-speed startup -->
+    <link rel="preload" href="https://i.ibb.co/LdXvxY3b/B0006.png" as="image" />
+    <link rel="preconnect" href="https://i.ibb.co" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -35,7 +40,7 @@
       @font-face {
         font-family: 'Liana';
         src: url('https://www.wfonts.com/data/2016/07/03/liana/Liana.otf') format('opentype');
-        font-display: swap;
+        font-display: block; /* Avoid flash of unstyled text for the logo */
       }
       
       html, body {
@@ -61,8 +66,10 @@
       }
 
       .font-liana { font-family: 'Liana', serif; }
+      .font-cursive { font-family: 'Great Vibes', cursive; }
       .font-simple { font-family: 'Plus Jakarta Sans', sans-serif; }
-      .font-arch { font-family: 'Montserrat', sans-serif; }
+      /* Montserrat replaced with Plus Jakarta Sans for consistency */
+      .font-arch { font-family: 'Plus Jakarta Sans', sans-serif; }
 
       section, footer {
         scroll-snap-align: start;
@@ -74,7 +81,9 @@
         flex-direction: column;
         justify-content: center;
         position: relative;
-        contain: layout style;
+        contain: content;
+        content-visibility: auto;
+        contain-intrinsic-size: 0 100vh;
       }
 
       @media (pointer: fine) {
@@ -99,6 +108,7 @@
         filter: blur(100px);
         opacity: 0.3;
         pointer-events: none;
+        will-change: transform;
       }
 
       .mesh-ball {
@@ -106,18 +116,24 @@
         border-radius: 50%;
         animation: mesh-move 20s infinite alternate ease-in-out;
         will-change: transform;
+        backface-visibility: hidden;
       }
 
       @keyframes mesh-move {
-        0% { transform: translate(0, 0) scale(1); }
-        100% { transform: translate(20%, 30%) scale(1.5); }
+        0% { transform: translate3d(0, 0, 0) scale(1); }
+        100% { transform: translate3d(20%, 30%, 0) scale(1.5); }
+      }
+
+      * {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
       }
 
       img {
         content-visibility: auto;
       }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300&family=Montserrat:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300&family=Great+Vibes&display=swap" rel="stylesheet">
     <script type="importmap">
     {
       "imports": {

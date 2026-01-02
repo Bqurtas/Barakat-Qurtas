@@ -66,7 +66,7 @@ const Footer: React.FC<FooterProps> = ({ theme, setActiveRoom }) => {
             <div>
               <p className="font-simple text-[9px] font-black tracking-[0.6em] uppercase text-blue-500 mb-6">Inquiries</p>
               <h2 className={`font-simple text-5xl md:text-6xl font-black uppercase tracking-tighter leading-none mb-10 ${textColor}`}>
-                Crafting <span className="italic font-liana text-blue-500 capitalize tracking-normal">Extraordinary</span> <br /> Identities
+                Connection
               </h2>
               
               <div className="space-y-6 pt-4">
@@ -160,12 +160,12 @@ const Footer: React.FC<FooterProps> = ({ theme, setActiveRoom }) => {
           {/* Copyright and Logo Area */}
           <div className={`pt-12 border-t ${borderColor} flex flex-col md:flex-row items-center justify-between gap-10`}>
             <div className="flex items-center gap-6">
-               <h3 className="font-liana text-5xl text-blue-500 cursor-none" onClick={() => navigateTo('home')}>Bqurtas</h3>
+               <h3 className="font-liana text-5xl text-blue-500 cursor-pointer hover:scale-105 transition-transform" onClick={() => navigateTo('home')}>Bqurtas</h3>
                <div className={`h-8 w-[1px] ${borderColor}`} />
-               <p className="font-simple text-[8px] font-black tracking-[0.3em] uppercase opacity-30">Visual Architect</p>
+               <p className="font-simple text-[8px] font-black tracking-[0.3em] uppercase opacity-30">Graphic Designer</p>
             </div>
             <p className="font-simple text-[9px] font-black tracking-[0.2em] uppercase opacity-20">
-              &copy; {new Date().getFullYear()} @Bqurtas. All Rights Reserved.
+              2026©Bqurtas. All Rights Reserved.
             </p>
           </div>
         </div>

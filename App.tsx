@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Splash from './components/Splash';
 import Navbar from './components/Navbar';
@@ -20,74 +20,32 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState<Theme>(Theme.DARK); 
   const [activeRoom, setActiveRoom] = useState<'home' | 'about' | 'contact'>('home');
-  const [activeSection, setActiveSection] = useState(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 4200);
+    // Set to 2000ms (2s) for a premium yet fast introduction
+    const timer = setTimeout(() => setLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
 
-  // Fix for scrolling in "Rooms"
   useEffect(() => {
     const rootElement = document.getElementById('root');
     if (!rootElement) return;
-
-    if (activeRoom === 'home') {
-      rootElement.style.scrollSnapType = 'y mandatory';
-    } else {
-      rootElement.style.scrollSnapType = 'none';
-    }
+    rootElement.style.scrollSnapType = activeRoom === 'home' ? 'y mandatory' : 'none';
   }, [activeRoom]);
-
-  const sectionIds = ['hero', 'design', 'partners', 'about-preview', 'collaborations', 'statistics', 'footer'];
-
-  useEffect(() => {
-    if (loading || activeRoom !== 'home') return;
-
-    const rootElement = document.getElementById('root');
-    if (!rootElement) return;
-
-    const observerOptions = {
-      root: rootElement,
-      rootMargin: '-50% 0px -50% 0px',
-      threshold: 0
-    };
-
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const index = sectionIds.indexOf(entry.target.id);
-          if (index !== -1) {
-            setActiveSection(index);
-          }
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-    sectionIds.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [loading, activeRoom]);
 
   const handleSetActiveRoom = (room: 'home' | 'about' | 'contact') => {
     if (room === activeRoom) return;
     const rootElement = document.getElementById('root');
-    if (rootElement) {
-      rootElement.scrollTo({ top: 0, behavior: 'auto' });
-    }
+    if (rootElement) rootElement.scrollTo({ top: 0, behavior: 'auto' });
     setActiveRoom(room);
   };
 
   const isDark = theme === Theme.DARK;
 
   return (
-    <div className={`${isDark ? 'bg-[#0a0f14] text-slate-100' : 'bg-[#f8fafc] text-slate-900'} transition-colors duration-1000 min-h-screen selection:bg-blue-600 selection:text-white flex flex-col font-simple`}>
-      <AnimatePresence>
-        {loading && <Splash />}
+    <div className={`${isDark ? 'bg-[#0a0f14] text-slate-100' : 'bg-[#f8fafc] text-slate-900'} transition-colors duration-700 min-h-screen selection:bg-blue-600 selection:text-white flex flex-col font-simple`}>
+      <AnimatePresence mode="wait">
+        {loading && <Splash key="splash" />}
       </AnimatePresence>
 
       {!loading && (
@@ -125,11 +83,11 @@ const App: React.FC = () => {
               )}
 
               {activeRoom === 'about' && (
-                <AboutRoom theme={theme} onBack={() => handleSetActiveRoom('home')} />
+                <AboutRoom key="about" theme={theme} onBack={() => handleSetActiveRoom('home')} />
               )}
 
               {activeRoom === 'contact' && (
-                <ContactRoom theme={theme} onBack={() => handleSetActiveRoom('home')} />
+                <ContactRoom key="contact" theme={theme} onBack={() => handleSetActiveRoom('home')} />
               )}
             </AnimatePresence>
           </div>

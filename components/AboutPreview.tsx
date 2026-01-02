@@ -59,7 +59,7 @@ const AboutPreview: React.FC<AboutPreviewProps> = ({ theme, onExplore }) => {
               transition={{ duration: 1.2, delay: 0.2 }}
               className="flex items-center gap-4"
             >
-              <span className="font-simple text-[10px] font-black uppercase tracking-[0.6em] text-blue-500">The Architect</span>
+              <span className="font-simple text-[10px] font-black uppercase tracking-[0.6em] text-blue-500">Graphic Design</span>
               <div className="h-[1px] w-24 bg-gradient-to-r from-blue-600/30 to-transparent" />
             </motion.div>
             
@@ -69,17 +69,17 @@ const AboutPreview: React.FC<AboutPreviewProps> = ({ theme, onExplore }) => {
               transition={{ duration: 1.2, delay: 0.3 }}
               className={`font-simple text-5xl md:text-7xl leading-[0.9] font-black uppercase tracking-tighter ${isDark ? 'text-white' : 'text-slate-950'}`}
             >
-              Master of <br />
-              <span className="text-blue-600">Visual</span> Logic
+              Personal <br />
+              <span className="text-blue-600">Biography</span>
             </motion.h3>
             
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, delay: 0.4 }}
-              className={`font-simple text-base md:text-lg leading-relaxed max-w-xl ${isDark ? 'text-slate-400' : 'text-slate-500'}`}
+              className={`font-simple text-base md:text-lg leading-relaxed max-w-xl italic font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}
             >
-              Based in the heart of Erbil, Barakat Qurtas transforms complex ideas into timeless visual languages. With a deep respect for precision, his work bridges the gap between art and functionality.
+              "I would like to be able to use my work more and dream of owning a big advertising and publishing company in the future."
             </motion.p>
 
             <motion.div

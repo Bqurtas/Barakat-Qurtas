@@ -44,7 +44,7 @@ const Counter: React.FC<CounterProps> = ({ value, label, theme }) => {
     >
       <div className="relative mb-2">
         <motion.span 
-          className={`font-arch text-4xl md:text-7xl font-black transition-all duration-700 block ${
+          className={`font-simple text-4xl md:text-7xl font-[900] transition-all duration-700 block ${
             isDark ? 'text-white' : 'text-slate-900'
           }`}
         >
@@ -53,7 +53,7 @@ const Counter: React.FC<CounterProps> = ({ value, label, theme }) => {
         <div className={`h-[2px] w-12 mx-auto mt-2 rounded-full transition-all duration-700 group-hover:w-20 ${isDark ? 'bg-blue-500/40' : 'bg-blue-600/30'}`} />
       </div>
       
-      <span className={`font-simple text-[10px] font-black uppercase tracking-[0.6em] ${
+      <span className={`font-simple text-[10px] font-black uppercase tracking-0.6em ${
         isDark ? 'text-white/20 group-hover:text-blue-400' : 'text-slate-900/20 group-hover:text-blue-600'
       } transition-colors duration-500`}>
         {label}
@@ -63,7 +63,6 @@ const Counter: React.FC<CounterProps> = ({ value, label, theme }) => {
 };
 
 const LogoTicker: React.FC<LogoTickerProps> = ({ theme }) => {
-  // 20 new URLs provided by the user
   const logos = [
     'https://i.ibb.co/bMjvRWP4/765431.png',
     'https://i.ibb.co/1V97hVS/765433.png',
@@ -87,8 +86,7 @@ const LogoTicker: React.FC<LogoTickerProps> = ({ theme }) => {
     'https://i.ibb.co/DHNw6pQK/342653454368.png'
   ];
 
-  // Infinite duplication for the ticker
-  const duplicatedLogos = [...logos, ...logos, ...logos, ...logos];
+  const duplicatedLogos = [...logos, ...logos, ...logos];
 
   const statsData = [
     { label: 'Designs', value: '+1000' },
@@ -118,9 +116,9 @@ const LogoTicker: React.FC<LogoTickerProps> = ({ theme }) => {
           initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }} 
           whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }} 
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="font-simple text-4xl md:text-6xl font-black uppercase tracking-tight leading-none"
+          className="font-simple text-4xl md:text-6xl font-[900] uppercase tracking-tight leading-none"
         >
-          Global Impact
+          Statistics
         </motion.h2>
       </div>
 
@@ -132,7 +130,17 @@ const LogoTicker: React.FC<LogoTickerProps> = ({ theme }) => {
         </div>
       </div>
 
-      <div className="relative w-full overflow-hidden flex items-center h-28 md:h-36">
+      <div className="mb-12 text-center">
+         <motion.h3 
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 0.25, scale: 1 }}
+            className={`font-simple text-[10px] md:text-[12px] font-black uppercase tracking-[0.8em] ${isDark ? 'text-white' : 'text-slate-900'}`}
+         >
+           Logo Design
+         </motion.h3>
+      </div>
+
+      <div className="relative w-full overflow-hidden flex items-center h-40 md:h-56">
         <div className="flex w-max items-center">
           <motion.div 
             animate={{ x: [0, -2000] }}
@@ -141,6 +149,7 @@ const LogoTicker: React.FC<LogoTickerProps> = ({ theme }) => {
               repeat: Infinity, 
               ease: "linear" 
             }}
+            style={{ willChange: 'transform' }}
             className="flex items-center gap-24 md:gap-40 pr-24 md:pr-40"
           >
             {duplicatedLogos.map((logo, idx) => (
@@ -150,7 +159,9 @@ const LogoTicker: React.FC<LogoTickerProps> = ({ theme }) => {
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   whileHover={{ scale: 1.1, opacity: 1 }}
-                  className="h-14 md:h-20 w-auto grayscale opacity-10 transition-all duration-700 cursor-none" 
+                  loading="lazy"
+                  decoding="async"
+                  className="h-24 md:h-36 w-auto grayscale opacity-25 transition-all duration-700 cursor-none" 
                   alt="Partner logo"
                   style={{ maxWidth: 'none', objectFit: 'contain' }}
                 />
