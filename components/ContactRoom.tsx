@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Send, MapPin, Phone, Mail, Instagram, Linkedin, Twitter, Facebook, Youtube, Music, Palette, Globe, Ghost, MessageCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import { Theme } from '../types';
+import Footer from './Footer';
 
 interface ContactRoomProps {
   theme: Theme;
@@ -61,9 +62,9 @@ const ContactRoom: React.FC<ContactRoomProps> = ({ theme, onBack }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className={`min-h-screen pt-32 pb-20 px-6 relative z-10`}
+      className={`min-h-screen relative z-10`}
     >
-      <div className="container mx-auto max-w-6xl">
+      <div className="container mx-auto max-w-6xl px-6 pt-32 pb-20">
         <motion.button
           onClick={onBack}
           initial={{ x: -20, opacity: 0 }}
@@ -77,7 +78,7 @@ const ContactRoom: React.FC<ContactRoomProps> = ({ theme, onBack }) => {
           <span className="font-simple text-[10px] font-black uppercase tracking-[0.4em] opacity-40 group-hover:opacity-100 transition-opacity">Back to Work</span>
         </motion.button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-20">
           {/* LEFT: Information */}
           <div className="space-y-12">
             <div>
@@ -87,7 +88,7 @@ const ContactRoom: React.FC<ContactRoomProps> = ({ theme, onBack }) => {
                 className="font-simple text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85] mb-8"
               >
                 Let's Build <br /> <span className="text-blue-600 italic font-liana tracking-normal capitalize">Legacy</span>
-              </h1>
+              </motion.h1>
               <p className={`font-simple text-base md:text-lg ${subTextColor} max-w-md`}>
                 Whether it's a presidential brand or a startup identity, every project is a masterpiece waiting to happen.
               </p>
@@ -254,11 +255,12 @@ const ContactRoom: React.FC<ContactRoomProps> = ({ theme, onBack }) => {
                 </motion.form>
               )}
             </AnimatePresence>
-
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 blur-[60px] rounded-full pointer-events-none" />
           </motion.div>
         </div>
       </div>
+
+      <Footer theme={theme} setActiveRoom={onBack} />
     </motion.div>
   );
 };

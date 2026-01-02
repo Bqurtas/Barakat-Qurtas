@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, Moon, Instagram, Linkedin, Twitter, X, Menu, Facebook, Youtube, Music, Palette, Globe, Ghost, MessageCircle } from 'lucide-react';
+import { Sun, Moon, Instagram, Linkedin, Twitter, X, Menu, Facebook, Youtube, Music, MessageCircle } from 'lucide-react';
 import { Theme } from '../types';
 
 interface NavbarProps {
@@ -16,54 +16,70 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const root = document.getElementById('root');
+    const handleScroll = () => {
+      if (root) setScrolled(root.scrollTop > 50);
+    };
+    if (root) root.addEventListener('scroll', handleScroll);
+    return () => {
+      if (root) root.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const navItems = [
-    { name: 'Design', id: 'home' },
-    { name: 'About', id: 'about' },
-    { name: 'Contact', id: 'contact' }
+    { name: 'Design', id: 'design', type: 'anchor' },
+    { name: 'Biography', id: 'about', type: 'room' },
+    { name: 'Contact', id: 'contact', type: 'room' }
   ];
 
-  const socialLinks = [
-    { icon: <Instagram size={18} />, url: 'https://instagram.com/Bqurtas', label: 'Instagram' },
-    { icon: <Linkedin size={18} />, url: 'https://linkedin.com/in/Bqurtas', label: 'LinkedIn' },
-    { icon: <Twitter size={18} />, url: 'https://twitter.com/Bqurtas', label: 'X' },
-    { icon: <Facebook size={18} />, url: 'https://facebook.com/Bqurtas', label: 'Facebook' },
-    { icon: <Youtube size={18} />, url: 'https://youtube.com/@Bqurtas', label: 'YouTube' },
-    { icon: <Palette size={18} />, url: 'https://behance.net/Bqurtas', label: 'Behance' },
-    { icon: <Globe size={18} />, url: 'https://dribbble.com/Bqurtas', label: 'Dribbble' },
-    { icon: <Music size={18} />, url: 'https://tiktok.com/@Bqurtas', label: 'TikTok' },
+  // More links for the main strip
+  const stripSocialLinks = [
+    { icon: <Instagram size={16} />, url: 'https://instagram.com/Bqurtas', label: 'Instagram' },
+    { icon: <Facebook size={16} />, url: 'https://facebook.com/Bqurtas', label: 'Facebook' },
+    { icon: <MessageCircle size={16} />, url: 'https://wa.me/9647517884985', label: 'WhatsApp' },
+    { icon: <Youtube size={16} />, url: 'https://youtube.com/@Bqurtas', label: 'YouTube' },
+    { icon: <Twitter size={16} />, url: 'https://twitter.com/Bqurtas', label: 'X' },
+  ];
+
+  const fullSocialLinks = [
+    ...stripSocialLinks,
+    { icon: <Linkedin size={20} />, url: 'https://linkedin.com/in/Bqurtas', label: 'LinkedIn' },
+    { icon: <Music size={20} />, url: 'https://tiktok.com/@Bqurtas', label: 'TikTok' },
   ];
 
   const isDark = theme === Theme.DARK;
 
-  const curtainVariants = {
-    closed: { 
-      y: '-100%',
-      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
-    },
-    open: { 
-      y: '0%',
-      transition: { duration: 1, ease: [0.16, 1, 0.3, 1] }
+  const handleNavClick = (item: { name: string, id: string, type: string }) => {
+    setIsMenuOpen(false);
+    if (item.type === 'room') {
+      setActiveRoom(item.id as any);
+    } else if (item.type === 'anchor') {
+      if (activeRoom !== 'home') {
+        setActiveRoom('home');
+        setTimeout(() => {
+          const element = document.getElementById(item.id);
+          if (element) element.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      } else {
+        const element = document.getElementById(item.id);
+        if (element) element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
-  const handleLogoClick = () => {
-    setActiveRoom('home');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const menuVariants = {
+    closed: { opacity: 0, backdropFilter: "blur(0px)", transition: { duration: 0.6 } },
+    open: { 
+      opacity: 1, 
+      backdropFilter: "blur(50px)", 
+      transition: { duration: 0.8, staggerChildren: 0.1, delayChildren: 0.2 } 
+    },
+    exit: { opacity: 0, backdropFilter: "blur(0px)", transition: { duration: 0.6 } }
   };
 
-  const handleProfileClick = () => {
-    setActiveRoom('home');
-    setTimeout(() => {
-      const designSection = document.getElementById('design');
-      if (designSection) {
-        designSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 100);
+  const itemVariants = {
+    closed: { y: 30, opacity: 0, filter: "blur(10px)" },
+    open: { y: 0, opacity: 1, filter: "blur(0px)", transition: { duration: 0.6 } }
   };
 
   return (
@@ -75,31 +91,31 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
           animate={{ 
             y: 0, 
             opacity: 1,
-            maxWidth: scrolled ? '540px' : '980px',
+            // Reduced maxWidth for a shorter, more elegant strip
+            maxWidth: scrolled ? '550px' : '920px',
           }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className={`pointer-events-auto flex items-center justify-between rounded-full border border-white/10 backdrop-blur-3xl h-14 md:h-16 w-full relative px-3 md:px-6 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] ${
             isDark ? 'bg-slate-950/80' : 'bg-white/80'
           }`}
         >
-          {/* LEFT: DYNAMIC LOGO */}
           <div className="flex items-center gap-2 md:gap-3 overflow-hidden">
             <motion.div 
               layout
-              onClick={handleProfileClick}
+              onClick={() => setActiveRoom('home')}
               whileHover={{ scale: 1.1, rotate: 5 }}
               className={`flex-shrink-0 w-9 h-9 md:w-11 md:h-11 rounded-full overflow-hidden border-2 transition-colors cursor-pointer ${
                 isDark ? 'border-white/20' : 'border-slate-900/10'
               }`}
             >
               <img 
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200" 
-                alt="Barakat Profile" 
-                className="w-full h-full object-cover grayscale brightness-110"
+                src="https://i.ibb.co/D3h6b89/Barakat-Qurtas.png" 
+                alt="Barakat Qurtas" 
+                className="w-full h-full object-cover"
               />
             </motion.div>
             
-            <motion.div layout onClick={handleLogoClick} className="flex flex-col -gap-1 min-w-0 cursor-pointer">
+            <motion.div layout onClick={() => setActiveRoom('home')} className="flex flex-col -gap-1 min-w-0 cursor-pointer">
               <motion.span 
                 layout
                 className={`font-liana text-lg md:text-3xl leading-none transition-colors truncate ${isDark ? 'text-blue-500' : 'text-blue-600'}`}
@@ -108,54 +124,55 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
               </motion.span>
               <motion.span 
                 layout
-                className={`font-simple text-[6px] md:text-[8px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] opacity-40 ml-0.5 md:ml-1 ${isDark ? 'text-white' : 'text-slate-900'}`}
+                className={`font-simple text-[6px] md:text-[8px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] ml-0.5 md:ml-1 ${isDark ? 'text-white/40' : 'text-slate-400'}`}
               >
                 {scrolled ? 'Designer' : 'Graphic Designer'}
               </motion.span>
             </motion.div>
           </div>
 
-          {/* RIGHT: TOOLS & SOCIALS */}
           <div className="flex items-center gap-1 md:gap-3 flex-shrink-0">
-            <div className="hidden lg:flex items-center gap-1">
-              {socialLinks.slice(0, 5).map((link, idx) => (
-                <motion.a 
+            {/* Extended Social Icons on the strip (Visible on Desktop) */}
+            <div className="hidden lg:flex items-center gap-1 mr-2 border-r border-white/10 pr-3">
+              {stripSocialLinks.map((link, idx) => (
+                <motion.a
                   key={idx}
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ y: -4, scale: 1.1, color: '#2563eb' }}
-                  className={`p-2 transition-all opacity-40 ${isDark ? 'text-white' : 'text-slate-900'}`}
+                  whileHover={{ scale: 1.25, color: '#5D67E8' }}
+                  className={`p-2 transition-colors ${isDark ? 'text-white/40' : 'text-slate-400'}`}
                   title={link.label}
                 >
                   {link.icon}
                 </motion.a>
               ))}
-              <div className={`w-[1px] h-6 mx-1 ${isDark ? 'bg-white/10' : 'bg-slate-950/10'}`} />
             </div>
 
-            <motion.button 
-              layout
-              onClick={toggleTheme}
-              whileHover={{ scale: 1.1, backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' }}
-              className={`flex items-center justify-center w-9 h-9 md:w-11 md:h-11 transition-all rounded-xl border ${
-                isDark ? 'border-white/5 text-white' : 'border-slate-950/5 text-slate-950'
-              }`}
-            >
-              {isDark ? <Sun size={14} /> : <Moon size={14} />}
-            </motion.button>
+            <div className="flex items-center gap-1 md:gap-2">
+              <motion.button 
+                layout
+                onClick={toggleTheme}
+                whileHover={{ scale: 1.2, rotate: 180 }}
+                className={`flex items-center justify-center w-9 h-9 md:w-11 md:h-11 transition-colors ${
+                  isDark ? 'text-white' : 'text-slate-400'
+                }`}
+              >
+                {isDark ? <Sun size={18} /> : <Moon size={18} />}
+              </motion.button>
 
-            <motion.button
-              layout
-              onClick={() => setIsMenuOpen(true)}
-              whileHover={{ scale: 1.05, backgroundColor: '#2563eb', color: '#fff' }}
-              whileTap={{ scale: 0.95 }}
-              className={`flex items-center justify-center w-9 h-9 md:w-11 md:h-11 transition-all rounded-xl shadow-lg ${
-                isDark ? 'bg-white text-slate-950' : 'bg-slate-950 text-white'
-              }`}
-            >
-              <Menu size={16} md:size={18} strokeWidth={2.5} />
-            </motion.button>
+              <motion.button
+                layout
+                onClick={() => setIsMenuOpen(true)}
+                whileHover={{ scale: 1.05, backgroundColor: '#5D67E8', color: '#fff' }}
+                whileTap={{ scale: 0.95 }}
+                className={`flex items-center justify-center w-9 h-9 md:w-11 md:h-11 transition-all rounded-full shadow-lg ${
+                  isDark ? 'bg-white text-slate-950' : 'bg-slate-950 text-white'
+                }`}
+              >
+                <Menu size={16} md:size={18} strokeWidth={2.5} />
+              </motion.button>
+            </div>
           </div>
         </motion.div>
       </nav>
@@ -163,71 +180,69 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            variants={curtainVariants}
+            variants={menuVariants}
             initial="closed"
             animate="open"
-            exit="closed"
-            className={`fixed inset-0 z-[100] flex flex-col items-center justify-center backdrop-blur-3xl ${
-              isDark ? 'bg-slate-950/98' : 'bg-white/98'
+            exit="exit"
+            className={`fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden ${
+              isDark ? 'bg-slate-950/90 text-white' : 'bg-white/90 text-slate-900'
             }`}
           >
             <motion.button 
               onClick={() => setIsMenuOpen(false)}
               whileHover={{ rotate: 90, scale: 1.1, backgroundColor: '#ef4444', color: '#fff' }}
-              className={`absolute top-10 right-10 w-12 h-12 md:w-14 md:h-14 border rounded-2xl flex items-center justify-center transition-all ${
+              className={`absolute top-10 right-10 w-12 h-12 md:w-14 md:h-14 border rounded-full flex items-center justify-center transition-all z-20 ${
                 isDark ? 'border-white/10 text-white' : 'border-slate-900/10 text-slate-900'
               }`}
             >
               <X size={24} />
             </motion.button>
 
-            <div className="flex flex-col gap-4 md:gap-8 items-center mb-12">
-              {navItems.map((item, idx) => (
-                <motion.button
-                  key={item.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 + idx * 0.1 }}
-                  onClick={() => {
-                    setActiveRoom(item.id as any);
-                    setIsMenuOpen(false);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="group relative"
-                >
-                  <span className={`font-simple text-5xl md:text-8xl font-black uppercase tracking-tighter transition-all duration-500 inline-block group-hover:text-blue-600 group-hover:italic ${
-                    (activeRoom === item.id || (activeRoom === 'home' && item.id === 'home')) ? 'text-blue-600' : (isDark ? 'text-white' : 'text-slate-900')
-                  }`}>
-                    {item.name === 'Design' ? 'Works' : item.name}
-                  </span>
-                </motion.button>
-              ))}
-            </div>
+            <div className="flex flex-col gap-6 md:gap-10 items-center mb-16 relative z-10 w-full px-6">
+              <motion.div variants={itemVariants} className="flex flex-col items-center gap-4 mb-4">
+                <div className={`w-20 h-20 md:w-28 md:h-28 rounded-full overflow-hidden border-4 ${isDark ? 'border-blue-500/20' : 'border-blue-500/10'} shadow-2xl`}>
+                  <img src="https://i.ibb.co/D3h6b89/Barakat-Qurtas.png" className="w-full h-full object-cover" alt="Portrait" />
+                </div>
+                <div className="text-center">
+                  <h2 className="font-liana text-3xl md:text-5xl text-blue-500 leading-none">Barakat Qurtas</h2>
+                  <p className={`font-simple text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] mt-2 ${isDark ? 'opacity-40' : 'opacity-30'}`}>Graphic Designer</p>
+                </div>
+              </motion.div>
 
-            <div className="flex flex-col items-center gap-8">
-              <div className="flex flex-col items-center">
-                <span className="font-liana text-3xl text-blue-600">Barakat Qurtas</span>
-                <span className={`font-simple text-[8px] font-black uppercase tracking-[0.5em] opacity-30 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  Graphic Designer
-                </span>
-              </div>
-              
-              <div className="flex flex-wrap justify-center gap-4 max-w-sm px-6">
-                {socialLinks.map((link, idx) => (
-                  <motion.a 
-                    key={idx} 
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ y: -8, scale: 1.2, color: '#2563eb', backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)' }}
-                    className={`p-4 rounded-2xl transition-all opacity-50 hover:opacity-100 ${isDark ? 'text-white' : 'text-slate-900'}`}
-                    title={link.label}
+              <div className="flex flex-col gap-3 items-center">
+                {navItems.map((item) => (
+                  <motion.div
+                    key={item.id}
+                    variants={itemVariants}
+                    className="relative px-12 py-1 cursor-pointer group"
+                    onClick={() => handleNavClick(item)}
                   >
-                    {link.icon}
-                  </motion.a>
+                    <motion.span
+                      className={`font-simple text-3xl md:text-6xl font-black uppercase tracking-tight transition-all duration-500 inline-block ${
+                        isDark ? 'text-white/40' : 'text-slate-900/40'
+                      } group-hover:text-blue-500 group-hover:scale-105`}
+                    >
+                      {item.name}
+                    </motion.span>
+                  </motion.div>
                 ))}
               </div>
             </div>
+
+            <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-4 md:gap-8 px-6 relative z-10">
+              {fullSocialLinks.map((link, idx) => (
+                <motion.a 
+                  key={idx} 
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -5, scale: 1.2, color: '#5D67E8' }}
+                  className={`transition-all ${isDark ? 'text-white/30' : 'text-slate-400'}`}
+                >
+                  {React.cloneElement(link.icon as React.ReactElement, { size: 22 })}
+                </motion.a>
+              ))}
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

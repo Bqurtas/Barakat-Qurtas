@@ -5,64 +5,116 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Barakat Qurtas | Visual Architect</title>
+    <link rel="preconnect" href="https://i.ibb.co" />
+    <link rel="preconnect" href="https://images.unsplash.com" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              blue: {
+                50: '#f0f1fe',
+                100: '#e1e3fd',
+                200: '#c3c7fb',
+                300: '#a5abf9',
+                400: '#878ff7',
+                500: '#5D67E8',
+                600: '#4a52ba',
+                700: '#373e8b',
+                800: '#25295d',
+                900: '#12152e',
+                950: '#090a17',
+              }
+            }
+          }
+        }
+      }
+    </script>
     <style>
       @font-face {
         font-family: 'Liana';
         src: url('https://www.wfonts.com/data/2016/07/03/liana/Liana.otf') format('opentype');
-        font-display: block; /* Ensures text is invisible until the font is ready */
+        font-display: swap;
       }
       
-      body {
+      html, body {
+        height: 100%;
         margin: 0;
-        overflow-x: hidden;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      #root {
+        height: 100vh;
+        overflow-y: scroll;
+        scroll-snap-type: y mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      body {
+        background-color: #05070a;
         font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
         -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
       }
 
-      .font-liana {
-        font-family: 'Liana', serif;
+      .font-liana { font-family: 'Liana', serif; }
+      .font-simple { font-family: 'Plus Jakarta Sans', sans-serif; }
+      .font-arch { font-family: 'Montserrat', sans-serif; }
+
+      section, footer {
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        min-height: 100vh;
+        width: 100%;
+        margin: 0 !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        contain: layout style;
       }
 
-      .font-simple {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-      }
-
-      .font-arch {
-        font-family: 'Montserrat', sans-serif;
-      }
-
-      /* Custom cursor hide on body */
       @media (pointer: fine) {
-        body {
-          cursor: none;
-        }
-        a, button, [role="button"] {
-          cursor: none;
-        }
+        * { cursor: none !important; }
+        input, textarea { cursor: text !important; }
       }
 
-      /* Hide scrollbar */
-      ::-webkit-scrollbar {
-        display: none;
-      }
-      body {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+      #root::-webkit-scrollbar { width: 0px; background: transparent; }
+      
+      .text-glow {
+        text-shadow: 0 0 30px rgba(93, 103, 232, 0.5);
       }
 
-      /* Premium Glassmorphism */
-      .glass-card {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+      .mesh-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+        filter: blur(100px);
+        opacity: 0.3;
+        pointer-events: none;
       }
 
-      .glass-card-light {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(30, 64, 175, 0.05);
+      .mesh-ball {
+        position: absolute;
+        border-radius: 50%;
+        animation: mesh-move 20s infinite alternate ease-in-out;
+        will-change: transform;
+      }
+
+      @keyframes mesh-move {
+        0% { transform: translate(0, 0) scale(1); }
+        100% { transform: translate(20%, 30%) scale(1.5); }
+      }
+
+      img {
+        content-visibility: auto;
       }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300&family=Montserrat:wght@900&display=swap" rel="stylesheet">
@@ -79,6 +131,11 @@
     </script>
   </head>
   <body>
+    <div class="mesh-bg">
+      <div class="mesh-ball w-[600px] h-[600px] bg-[#5D67E8]/20 top-[-10%] left-[-10%]"></div>
+      <div class="mesh-ball w-[500px] h-[500px] bg-[#5D67E8]/10 bottom-[-10%] right-[-10%]" style="animation-delay: -5s;"></div>
+      <div class="mesh-ball w-[400px] h-[400px] bg-[#5D67E8]/5 top-[40%] left-[30%]" style="animation-delay: -10s;"></div>
+    </div>
     <div id="root"></div>
   </body>
 </html>

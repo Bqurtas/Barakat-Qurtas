@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Layout, 
@@ -9,8 +9,12 @@ import {
   Mic2, 
   Play, 
   Camera,
+  Plus,
+  FileText,
   X,
-  Plus
+  Maximize2,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { Theme, PortfolioItem } from '../types';
 import { MY_WORKS_DATA } from '../worksData';
@@ -20,6 +24,7 @@ const TOP_CATEGORIES = [
   { name: 'Social Media', icon: <Share2 size={18} /> },
   { name: 'Book Covers', icon: <BookOpen size={18} /> },
   { name: 'Logo', icon: <Fingerprint size={18} /> },
+  { name: 'Posters', icon: <FileText size={18} /> },
 ];
 
 const BOTTOM_CATEGORIES = [
@@ -33,8 +38,9 @@ interface PortfolioProps { theme: Theme; }
 const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
   const [activeTab, setActiveTab] = useState('General Design');
   const [hoveredTab, setHoveredTab] = useState<string | null>(null);
-  const [selectedImage, setSelectedImage] = useState<PortfolioItem | null>(null);
   const [visibleCount, setVisibleCount] = useState(12);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [direction, setDirection] = useState(0);
 
   const isDark = theme === Theme.DARK;
 
@@ -49,6 +55,55 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
     setVisibleCount(prev => prev + 8);
   };
 
+  const openLightbox = (index: number) => {
+    setSelectedIndex(index);
+    document.body.style.overflow = 'hidden';
+    const root = document.getElementById('root');
+    if (root) {
+      root.style.overflow = 'hidden';
+      root.style.touchAction = 'none';
+    }
+  };
+
+  const closeLightbox = () => {
+    setSelectedIndex(null);
+    document.body.style.overflow = 'unset';
+    const root = document.getElementById('root');
+    if (root) {
+      root.style.overflowY = 'scroll';
+      root.style.touchAction = 'auto';
+    }
+  };
+
+  const nextImage = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setDirection(1);
+    if (selectedIndex !== null) {
+      setSelectedIndex((prev) => (prev !== null && prev < filteredItems.length - 1 ? prev + 1 : 0));
+    }
+  }, [selectedIndex, filteredItems.length]);
+
+  const prevImage = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setDirection(-1);
+    if (selectedIndex !== null) {
+      setSelectedIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : filteredItems.length - 1));
+    }
+  }, [selectedIndex, filteredItems.length]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedIndex === null) return;
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'ArrowLeft') prevImage();
+      if (e.key === 'Escape') closeLightbox();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedIndex, nextImage, prevImage]);
+
+  const selectedWork = selectedIndex !== null ? filteredItems[selectedIndex] : null;
+
   const renderTab = (cat: { name: string, icon: React.ReactNode }) => {
     const isActive = activeTab === cat.name;
     const isHovered = hoveredTab === cat.name;
@@ -62,35 +117,34 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
         }}
         onMouseEnter={() => setHoveredTab(cat.name)}
         onMouseLeave={() => setHoveredTab(null)}
-        className="relative flex items-center gap-3 px-6 md:px-8 py-4 transition-all duration-500 group outline-none overflow-visible"
+        className="relative flex items-center gap-3 px-6 py-3.5 transition-all duration-500 group outline-none overflow-visible rounded-full"
       >
         <AnimatePresence>
           {(isHovered && !isActive) && (
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="absolute inset-0 z-0 pointer-events-none"
-            >
-              <div className="absolute inset-1 rounded-[18px] shadow-[0_0_30px_rgba(37,99,235,0.12)]" />
-            </motion.div>
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="absolute inset-0 z-0 pointer-events-none rounded-full shadow-[0_0_30px_rgba(93,103,232,0.3)]"
+            />
           )}
 
           {isActive && (
             <motion.div 
               layoutId="activeTabPill"
+              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
               className="absolute inset-0 z-10 pointer-events-none"
             >
-              <div className="absolute inset-0 bg-blue-600 rounded-[18px] shadow-lg shadow-blue-600/20" />
+              <div className="absolute inset-0 bg-blue-600 rounded-full shadow-[0_10px_25px_rgba(93,103,232,0.4)]" />
             </motion.div>
           )}
         </AnimatePresence>
 
-        <div className={`relative z-20 flex items-center gap-3 transition-all duration-500 ${isActive || isHovered ? 'scale-105' : 'scale-100'}`}>
+        <div className={`relative z-20 flex items-center gap-2.5 transition-all duration-500 ${isActive || isHovered ? 'scale-105' : 'scale-100'}`}>
           <div className={`transition-all duration-500 ${isActive ? 'text-white' : isHovered ? 'text-blue-500' : isDark ? 'text-slate-700' : 'text-slate-400'}`}>
-            {cat.icon}
+            {React.cloneElement(cat.icon as React.ReactElement, { size: 16 })}
           </div>
-          <span className={`font-simple text-[10px] md:text-[11px] font-black tracking-[0.2em] uppercase transition-all duration-500 ${isActive ? 'text-white' : isHovered ? 'text-blue-200' : 'opacity-30 text-slate-500'}`}>
+          <span className={`font-simple text-[8px] md:text-[9px] font-black tracking-[0.2em] uppercase transition-all duration-500 ${isActive ? 'text-white' : isHovered ? (isDark ? 'text-blue-100' : 'text-blue-600') : 'opacity-20 text-slate-500'}`}>
             {cat.name}
           </span>
         </div>
@@ -99,85 +153,227 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
   };
 
   return (
-    <section id="design" className="relative transition-all duration-1000 bg-transparent">
-      <div className="container mx-auto max-w-7xl relative z-10 px-6 pt-24 pb-12">
-        <div className="text-center mb-16">
-          <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 0.3 }} className="font-simple text-[9px] tracking-[1.2em] uppercase font-black mb-4">Showcase</motion.p>
-          <motion.h2 initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} className="font-arch text-5xl md:text-7xl font-black uppercase tracking-tight leading-none">WORKS</motion.h2>
-          <div className="w-12 h-[2px] bg-blue-600 mx-auto mt-8 rounded-full shadow-[0_0_20px_rgba(37,99,235,0.5)]" />
-        </div>
-
-        <div className="flex flex-col items-center gap-4 mb-16">
-          <div className="flex flex-wrap justify-center items-center gap-2 md:gap-3">{TOP_CATEGORIES.map(renderTab)}</div>
-          <div className="flex flex-wrap justify-center items-center gap-2 md:gap-3">{BOTTOM_CATEGORIES.map(renderTab)}</div>
-        </div>
-      </div>
-
-      <div className="w-full px-2 md:px-10 pb-1">
-        {filteredItems.length > 0 ? (
-          <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-            <AnimatePresence mode="popLayout">
-              {displayedItems.map((item) => (
-                <motion.div
-                  key={item.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.96 }}
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  onClick={() => setSelectedImage(item)}
-                  className={`break-inside-avoid relative group overflow-hidden rounded-[24px] cursor-pointer transition-all duration-700 ${isDark ? 'bg-slate-900' : 'bg-white shadow-lg shadow-blue-900/5'}`}
-                >
-                  <img src={item.image} alt={item.title} className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-blue-950 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
-                    <p className="text-[8px] font-black uppercase tracking-[0.3em] text-blue-400 mb-1">{item.category}</p>
-                    <h4 className="text-white font-simple text-sm font-bold tracking-wide">{item.title}</h4>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-        ) : (
-          <div className="py-24 text-center">
-            <p className="font-simple text-[10px] uppercase tracking-[0.5em] opacity-20">No designs uploaded in this category yet</p>
-          </div>
-        )}
-
-        {hasMore && (
-          <div className="flex justify-center mt-12 mb-16">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleLoadMore}
-              className={`flex items-center gap-4 px-10 py-5 rounded-2xl border font-simple text-[10px] font-black uppercase tracking-[0.4em] transition-all duration-500 ${isDark ? 'border-white/10 text-white hover:bg-white hover:text-black' : 'border-slate-900/10 text-slate-900 hover:bg-slate-900 hover:text-white'}`}
-            >
-              Load More Masterpieces <Plus size={14} />
-            </motion.button>
-          </div>
-        )}
-      </div>
-
+    <section id="design" className="relative pt-32 pb-24">
+      {/* Immersive Gallery Lightbox */}
       <AnimatePresence>
-        {selectedImage && (
-          <motion.div
+        {selectedWork && (
+          <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/98 backdrop-blur-3xl p-4 md:p-12"
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[2000] bg-[#000000] flex flex-col items-center overflow-hidden"
+            onClick={closeLightbox}
           >
-            <motion.button onClick={() => setSelectedImage(null)} className="absolute top-8 right-8 z-[1010] w-14 h-14 rounded-2xl border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-blue-600 transition-all duration-500">
-              <X size={24} />
-            </motion.button>
-            <motion.div initial={{ scale: 0.92, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.92, opacity: 0 }} className="relative max-w-7xl w-full max-h-full flex flex-col items-center justify-center gap-6">
-              <img src={selectedImage.image} alt="Selected Design" className="max-w-full max-h-[80vh] object-contain rounded-2xl shadow-2xl" />
-              <div className="text-center">
-                <p className="font-simple text-[10px] font-black uppercase tracking-[0.6em] text-blue-500 mb-2">{selectedImage.category}</p>
-                <h3 className="text-white font-simple text-2xl font-black uppercase tracking-tight">{selectedImage.title}</h3>
-              </div>
-            </motion.div>
+            {/* Top Area: Reserved for Navbar feel + Minimal UI */}
+            <div className="w-full h-32 md:h-40 flex items-center justify-between px-8 md:px-12 pointer-events-none z-[2050]">
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="bg-white/5 backdrop-blur-3xl border border-white/10 px-6 py-2 rounded-full pointer-events-auto flex items-center gap-4"
+              >
+                 <span className="font-simple text-[9px] font-black uppercase tracking-[0.4em] text-blue-500">{selectedWork.category}</span>
+                 <div className="w-[1px] h-3 bg-white/10" />
+                 <span className="font-simple text-[9px] font-black uppercase tracking-[0.4em] text-white/30">{(selectedIndex || 0) + 1} / {filteredItems.length}</span>
+              </motion.div>
+
+              <motion.button 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                whileHover={{ scale: 1.1, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+                className="w-12 h-12 rounded-full bg-white/5 text-white flex items-center justify-center transition-all pointer-events-auto border border-white/10 backdrop-blur-xl"
+                onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
+              >
+                <X size={22} />
+              </motion.button>
+            </div>
+
+            {/* Navigation Arrows - Centered vertically in the image stage */}
+            <div className="absolute inset-x-6 md:inset-x-12 top-1/2 -translate-y-1/2 flex justify-between pointer-events-none z-[2040]">
+              <motion.button 
+                whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.05)' }}
+                whileTap={{ scale: 0.9 }}
+                className="w-16 h-16 md:w-24 md:h-24 rounded-full text-white/20 hover:text-white flex items-center justify-center pointer-events-auto transition-all"
+                onClick={prevImage}
+              >
+                <ChevronLeft size={48} />
+              </motion.button>
+              <motion.button 
+                whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.05)' }}
+                whileTap={{ scale: 0.9 }}
+                className="w-16 h-16 md:w-24 md:h-24 rounded-full text-white/20 hover:text-white flex items-center justify-center pointer-events-auto transition-all"
+                onClick={nextImage}
+              >
+                <ChevronRight size={48} />
+              </motion.button>
+            </div>
+            
+            {/* Image Stage: Perfectly Centered in the remaining space */}
+            <div className="flex-grow w-full flex items-center justify-center pointer-events-none p-6 md:p-12 pb-24">
+              <AnimatePresence mode="wait" custom={direction}>
+                <motion.div 
+                  key={selectedWork.id}
+                  custom={direction}
+                  initial={{ opacity: 0, scale: 0.95, filter: 'blur(20px)' }}
+                  animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, scale: 0.95, filter: 'blur(20px)' }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative flex flex-col items-center justify-center pointer-events-auto"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <img 
+                    src={selectedWork.image} 
+                    alt={selectedWork.title} 
+                    className="max-w-[85vw] max-h-[65vh] object-contain rounded-sm shadow-[0_50px_100px_rgba(0,0,0,1)] select-none pointer-events-none"
+                    draggable="false"
+                    decoding="async"
+                  />
+                  
+                  {/* Subtle caption below the image */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 0.4, y: 0 }}
+                    className="absolute -bottom-16 left-0 w-full text-center"
+                  >
+                    <h3 className="text-white font-simple text-[10px] md:text-[12px] font-black uppercase tracking-[1em] truncate max-w-full px-4">
+                      {selectedWork.title || 'Visual Artwork'}
+                    </h3>
+                  </motion.div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <div className="container mx-auto max-w-7xl relative z-10 px-6 pb-12">
+        <div className="text-center mb-16">
+          <motion.p 
+            initial={{ opacity: 0, tracking: '0.2em' }} 
+            whileInView={{ opacity: 0.2, tracking: '1em' }} 
+            transition={{ duration: 1.5 }}
+            className="font-simple text-[8px] uppercase font-black mb-4"
+          >
+            Showcase
+          </motion.p>
+          <motion.h2 
+            initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }} 
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }} 
+            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            className="font-arch text-4xl md:text-7xl font-black uppercase tracking-tighter leading-none"
+          >
+            Curated Works
+          </motion.h2>
+        </div>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.2 }}
+          className="flex flex-col items-center gap-3 mb-16"
+        >
+          <div className="flex flex-wrap justify-center items-center gap-2 md:gap-4">{TOP_CATEGORIES.map(renderTab)}</div>
+          <div className="flex flex-wrap justify-center items-center gap-2 md:gap-4">{BOTTOM_CATEGORIES.map(renderTab)}</div>
+        </motion.div>
+      </div>
+
+      <div className="w-full px-6 md:px-16 pb-12">
+        <AnimatePresence mode="wait">
+          <motion.div 
+            key={activeTab}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className={`
+              ${activeTab === 'Logo' ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-3' : 
+                activeTab === 'Book Covers' ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-20 perspective-[2000px]' : 
+                'columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4'}
+            `}
+          >
+            {displayedItems.map((item, index) => (
+              <motion.div
+                key={item.id}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, margin: "200px" }}
+                onClick={() => openLightbox(index)}
+                className={`
+                  relative group cursor-pointer transition-all duration-700 will-change-transform
+                  ${activeTab === 'Logo' ? 'aspect-square flex items-center justify-center p-0 bg-transparent' : 
+                    activeTab === 'Book Covers' ? 'flex flex-col items-center' :
+                    (isDark ? 'bg-slate-900 border border-white/5 shadow-xl hover:shadow-blue-500/10 rounded-[12px] overflow-hidden' : 'bg-white shadow-lg shadow-blue-900/[0.03] hover:shadow-blue-500/15 rounded-[12px] overflow-hidden')}
+                  `
+                }
+              >
+                {activeTab === 'Book Covers' ? (
+                  <div className="relative w-full flex flex-col items-center group/book">
+                    <div className="relative preserve-3d transition-transform duration-1000 rotate-y-[-25deg] group-hover/book:rotate-y-[-15deg] group-hover/book:scale-105">
+                       <div className="absolute -bottom-6 left-[-10%] w-[120%] h-8 bg-black/40 blur-xl rounded-full transform rotate-x-[90deg] opacity-60 transition-opacity" />
+                       <div className="relative z-10 w-full aspect-[2/3] overflow-hidden rounded-r-[4px] shadow-[20px_20px_40px_rgba(0,0,0,0.6)] bg-slate-800 border-l-[3px] border-black/40">
+                         <img 
+                          src={item.image} 
+                          alt={item.title} 
+                          className="w-full h-full object-cover"
+                         />
+                         <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 opacity-40 pointer-events-none" />
+                       </div>
+                    </div>
+                    <div className="absolute -bottom-10 w-[140%] h-[1px] bg-gradient-to-r from-transparent via-blue-500/30 to-transparent z-0" />
+                  </div>
+                ) : (
+                  <>
+                    <div className="absolute inset-0 z-40 bg-transparent" onContextMenu={(e) => e.preventDefault()} />
+                    <img 
+                      src={item.image} 
+                      alt={item.title} 
+                      draggable="false"
+                      loading={index < 8 ? "eager" : "lazy"}
+                      decoding="async"
+                      className={`${activeTab === 'Logo' ? 'w-full h-full object-contain' : 'w-full h-auto object-cover'} transition-all duration-1000 group-hover:scale-110 pointer-events-none`} 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 flex flex-col justify-end p-4 z-50">
+                       <div className="flex items-center justify-between gap-2">
+                         <motion.h4 className="text-white font-simple text-[8px] font-black uppercase tracking-widest truncate">
+                           {item.title || 'View Work'}
+                         </motion.h4>
+                         <Maximize2 size={10} className="text-white/60" />
+                       </div>
+                    </div>
+                  </>
+                )}
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
+
+        {hasMore && (
+          <div className="flex justify-center mt-20">
+            <motion.button
+              onClick={handleLoadMore}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              whileHover={{ scale: 1.05, backgroundColor: '#2563eb', color: '#fff' }}
+              whileTap={{ scale: 0.95 }}
+              className={`flex items-center gap-4 px-10 py-5 rounded-[18px] border font-simple text-[10px] font-black uppercase tracking-[0.4em] transition-all duration-500 ${isDark ? 'border-white/10 text-white/40 hover:border-transparent' : 'border-slate-900/10 text-slate-900/40 hover:border-transparent'}`}
+            >
+              Load More <Plus size={16} />
+            </motion.button>
+          </div>
+        )}
+      </div>
+
+      <style>{`
+        .perspective-[2000px] { perspective: 2000px; }
+        .preserve-3d { transform-style: preserve-3d; }
+        .rotate-y-[-25deg] { transform: rotateY(-25deg); }
+        .rotate-y-[-15deg] { transform: rotateY(-15deg); }
+        .rotate-y-[-90deg] { transform: rotateY(-90deg); }
+        .rotate-x-[90deg] { transform: rotateX(90deg); }
+      `}</style>
+
+      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/10 to-transparent" />
     </section>
   );
 };

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Quote, ArrowRight, Minus } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { Theme } from '../types';
 
 interface AboutPreviewProps {
@@ -13,116 +13,94 @@ const AboutPreview: React.FC<AboutPreviewProps> = ({ theme, onExplore }) => {
   const isDark = theme === Theme.DARK;
 
   return (
-    <section id="about" className="py-32 overflow-hidden relative">
-      {/* Ambient background decorative elements */}
-      <div className={`absolute top-1/4 left-10 w-64 h-64 blur-[120px] rounded-full opacity-20 pointer-events-none ${isDark ? 'bg-blue-600/20' : 'bg-blue-400/10'}`} />
-      
+    <section id="about-preview" className="py-32 overflow-hidden relative flex flex-col justify-center">
       <div className="container mx-auto px-6 max-w-6xl relative">
         <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
           
-          {/* IMAGE SECTION */}
           <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
-            className="relative lg:w-[42%]"
+            initial={{ opacity: 0, scale: 0.9, filter: 'blur(20px)' }}
+            whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+            transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+            className="relative lg:w-[40%]"
           >
-            <div className="relative z-10">
-              {/* OVAL (EGG-SHAPED) IMAGE CONTAINER */}
-              <div className={`relative aspect-[4/5] w-full rounded-full overflow-hidden border-[1px] p-2 transition-all duration-1000 ${
-                isDark ? 'border-white/5 bg-slate-900 shadow-[0_40px_80px_-15px_rgba(0,0,0,0.7)]' : 'border-blue-100 bg-white shadow-[0_40px_80px_-15px_rgba(37,99,235,0.1)]'
-              }`}>
+            <div className="relative group cursor-none" onClick={onExplore}>
+              <div 
+                className={`relative aspect-[3.5/4.5] w-full max-w-[340px] mx-auto rounded-[110px] md:rounded-[140px] overflow-hidden border p-2.5 transition-all duration-1000 ${
+                  isDark ? 'border-white/10 bg-slate-900 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)]' : 'border-blue-50 bg-white shadow-[0_40px_100px_-20px_rgba(93,103,232,0.15)]'
+                }`}
+              >
                 <img 
-                  src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800" 
-                  alt="Barakat Qurtas" 
-                  className="w-full h-full object-cover rounded-full grayscale hover:grayscale-0 transition-all duration-1000 scale-105 hover:scale-100" 
+                  src="https://i.ibb.co/LdXvxY3b/B0006.png" 
+                  className="w-full h-full object-cover rounded-[105px] md:rounded-[135px] transition-transform duration-1000 group-hover:scale-105" 
+                  alt="Barakat Qurtas Biography"
                 />
               </div>
 
-              {/* CIRCULAR EXPERIENCE BADGE */}
-              <motion.div 
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.8 }}
-                className="absolute -bottom-6 -right-2 md:-right-6 bg-blue-600 text-white w-24 h-24 md:w-32 md:h-32 rounded-full shadow-2xl z-20 flex flex-col items-center justify-center border-4 border-[#0a0f14]"
-                style={{ borderColor: isDark ? '#0a0f14' : '#f8fafc' }}
+              {/* Refined & Perfectly Centered Badge */}
+              <div 
+                className={`absolute bottom-0 right-1/2 translate-x-1/2 translate-y-1/2 md:translate-x-0 md:translate-y-0 md:-bottom-2 md:-right-2 bg-blue-600 text-white w-28 h-28 md:w-32 md:h-32 rounded-full z-20 flex flex-col items-center justify-center border-[6px] ${isDark ? 'border-[#0a0f14]' : 'border-white'} shadow-2xl shadow-blue-600/40`}
               >
-                <span className="font-arch text-2xl md:text-3xl font-black leading-none">12+</span>
-                <span className="font-simple text-[6px] md:text-[7px] uppercase tracking-[0.3em] font-black mt-1 opacity-60 text-center px-2">Years Exp</span>
-              </motion.div>
-            </div>
-            
-            {/* Decorative Frame behind image - also oval */}
-            <div className={`absolute -inset-4 border rounded-full -z-10 opacity-30 ${isDark ? 'border-white/5' : 'border-blue-200'}`} />
-          </motion.div>
-
-          {/* TEXT SECTION */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="lg:w-[58%] relative"
-          >
-            {/* The Classy Shape/Card */}
-            <div className={`p-10 md:p-16 rounded-[50px] md:rounded-[70px] relative transition-all duration-1000 overflow-hidden group ${
-              isDark 
-                ? 'bg-gradient-to-br from-white/[0.03] to-transparent border border-white/5 backdrop-blur-3xl' 
-                : 'bg-gradient-to-br from-white to-blue-50/30 border border-blue-100 shadow-xl shadow-blue-900/5'
-            }`}>
-              
-              {/* Subtle architectural grid pattern */}
-              <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
-                style={{ backgroundImage: `radial-gradient(${isDark ? 'white' : 'black'} 1px, transparent 0)`, backgroundSize: '30px 30px' }} 
-              />
-
-              <div className="relative z-10 flex flex-col gap-8">
-                <div className="flex items-center gap-4">
-                  <span className="font-simple text-[9px] font-black uppercase tracking-[0.6em] text-blue-600">The Vision</span>
-                  <div className={`h-[1px] w-12 ${isDark ? 'bg-white/10' : 'bg-blue-600/10'}`} />
-                </div>
-                
-                <h3 className="font-simple text-3xl md:text-5xl leading-[1.1] font-black uppercase tracking-tight">
-                  Design is the silent <br />
-                  <span className="font-liana text-blue-600 capitalize italic tracking-normal text-4xl md:text-6xl inline-block mt-2">ambassador</span> <br />
-                  of your brand.
-                </h3>
-                
-                <div className="space-y-6">
-                  <p className={`font-simple text-sm md:text-base leading-relaxed font-medium tracking-wide ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                    Based in Erbil, Barakat Qurtas transforms complex ideas into precise visual artifacts. His architectural approach to design ensures every pixel serves a purpose, creating timeless identities for high-profile clients across the region.
-                  </p>
-                  
-                  <div className={`flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em] ${isDark ? 'text-white/20' : 'text-black/10'}`}>
-                    <Minus size={14} />
-                    <span>Est. 2012 / Erbil, Kurdistan</span>
+                <div className="flex flex-col items-center justify-center text-center">
+                  <Sparkles size={12} className="mb-1 opacity-80" />
+                  <span className="font-arch text-2xl md:text-3xl font-black tracking-tighter leading-none">12+</span>
+                  <div className="flex flex-col items-center justify-center mt-0.5">
+                    <span className="font-simple text-[7px] md:text-[8px] uppercase tracking-[0.2em] font-black opacity-90 leading-none">Years</span>
+                    <span className="font-simple text-[7px] md:text-[8px] uppercase tracking-[0.2em] font-black opacity-90 leading-none mt-1">Experience</span>
                   </div>
-                </div>
-
-                <div className="flex items-center pt-4">
-                  <motion.button 
-                    onClick={onExplore}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`flex items-center gap-6 px-8 py-4 rounded-2xl border transition-all duration-500 group ${
-                      isDark 
-                        ? 'border-white/10 hover:border-blue-600 hover:bg-blue-600 text-white' 
-                        : 'border-slate-900/10 hover:border-blue-600 hover:bg-blue-600 hover:text-white text-slate-900'
-                    }`}
-                  >
-                    <span className="font-simple font-black tracking-[0.4em] text-[10px] uppercase">Explore Biography</span>
-                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                  </motion.button>
                 </div>
               </div>
             </div>
-
-            {/* Quote decoration */}
-            <Quote size={80} className={`absolute -top-10 -right-4 opacity-[0.03] rotate-12 ${isDark ? 'text-white' : 'text-blue-900'}`} />
           </motion.div>
+
+          <div className="lg:w-[60%] space-y-10">
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1.2, delay: 0.2 }}
+              className="flex items-center gap-4"
+            >
+              <span className="font-simple text-[10px] font-black uppercase tracking-[0.6em] text-blue-500">The Architect</span>
+              <div className="h-[1px] w-24 bg-gradient-to-r from-blue-600/30 to-transparent" />
+            </motion.div>
+            
+            <motion.h3 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, delay: 0.3 }}
+              className={`font-simple text-5xl md:text-7xl leading-[0.9] font-black uppercase tracking-tighter ${isDark ? 'text-white' : 'text-slate-950'}`}
+            >
+              Master of <br />
+              <span className="text-blue-600">Visual</span> Logic
+            </motion.h3>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, delay: 0.4 }}
+              className={`font-simple text-base md:text-lg leading-relaxed max-w-xl ${isDark ? 'text-slate-400' : 'text-slate-500'}`}
+            >
+              Based in the heart of Erbil, Barakat Qurtas transforms complex ideas into timeless visual languages. With a deep respect for precision, his work bridges the gap between art and functionality.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, delay: 0.5 }}
+            >
+              <motion.button 
+                onClick={onExplore}
+                whileHover={{ scale: 1.05, x: 10 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center gap-6 px-10 py-5 rounded-[22px] bg-blue-600 text-white shadow-2xl shadow-blue-600/30 group transition-all cursor-none"
+              >
+                <span className="font-simple font-black tracking-[0.4em] text-[11px] uppercase">Explore Biography</span>
+                <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform duration-500" />
+              </motion.button>
+            </motion.div>
+          </div>
         </div>
       </div>
+      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/10 to-transparent" />
     </section>
   );
 };

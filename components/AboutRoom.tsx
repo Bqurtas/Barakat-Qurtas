@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Quote, Sparkles, Award, MapPin } from 'lucide-react';
+import { ArrowLeft, Quote, MapPin, Download, GraduationCap, Heart, Award, ShieldCheck, Star, Rocket, Sparkles, CheckCircle } from 'lucide-react';
 import { Theme } from '../types';
+import Footer from './Footer';
 
 interface AboutRoomProps {
   theme: Theme;
@@ -10,121 +11,247 @@ interface AboutRoomProps {
 }
 
 const AboutRoom: React.FC<AboutRoomProps> = ({ theme, onBack }) => {
-  const textColor = theme === Theme.DARK ? 'text-slate-100' : 'text-slate-900';
-  const subTextColor = theme === Theme.DARK ? 'text-slate-400' : 'text-slate-500';
+  useEffect(() => {
+    const root = document.getElementById('root');
+    if (root) {
+      root.scrollTo({ top: 0, behavior: 'auto' });
+    }
+  }, []);
+
+  const isDark = theme === Theme.DARK;
+  const textColor = isDark ? 'text-slate-100' : 'text-slate-900';
+  const subTextColor = isDark ? 'text-slate-400' : 'text-slate-500';
+
+  const tools = [
+    'Photoshop', 'Illustrator', 'After Effects', 'Premiere Pro', 'InDesign', 'Lightroom', 'MS Word'
+  ];
+
+  const hobbies = [
+    'Traveling', 'Reading', 'Design', 'Law', 'Sports', 'Cleanliness', 'Respect'
+  ];
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className={`min-h-screen pt-32 pb-20 px-6 relative z-10 overflow-x-hidden`}
+      className="relative z-10 w-full"
     >
-      <div className="container mx-auto max-w-5xl">
-        <motion.button
-          onClick={onBack}
-          initial={{ x: -20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          whileHover={{ x: -5 }}
-          className="flex items-center gap-3 mb-16 group"
-        >
-          <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center">
-            <ArrowLeft size={18} />
-          </div>
-          <span className="font-simple text-[10px] font-black uppercase tracking-[0.4em] opacity-40 group-hover:opacity-100 transition-opacity">Return Home</span>
-        </motion.button>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-          <div className="lg:col-span-4 space-y-12">
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 1 }}
-              className={`relative aspect-[3/4] rounded-[60px] overflow-hidden border border-blue-500/10 shadow-2xl ${theme === Theme.DARK ? 'bg-slate-900' : 'bg-blue-50/20'}`}
+      <div className="container mx-auto max-w-6xl px-6 pt-24 md:pt-32">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          {/* LEFT SIDE: STICKY SIDEBAR */}
+          <div className="lg:col-span-4 lg:sticky lg:top-32 space-y-6">
+            <motion.button
+              onClick={onBack}
+              whileHover={{ x: -5 }}
+              className="flex items-center gap-3 group"
             >
-              <img 
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=800" 
-                alt="Portrait of Designer" 
-                className="w-full h-full object-cover grayscale brightness-90 transition-all duration-1000"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-transparent pointer-events-none" />
-            </motion.div>
-
-            <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                <MapPin className="text-blue-600" size={20} />
-                <span className={`font-simple text-xs font-bold ${textColor}`}>Erbil - Kurdistan Region, Iraq</span>
+              <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                <ArrowLeft size={18} />
               </div>
-              <div className={`p-6 rounded-[32px] border ${theme === Theme.DARK ? 'border-slate-800 bg-slate-900/40' : 'border-blue-100 bg-blue-50/30'}`}>
-                <p className="font-simple text-[9px] font-black uppercase tracking-[0.3em] opacity-30 mb-4">Core Stack</p>
-                <div className="flex flex-wrap gap-2">
-                  {['Photoshop', 'Illustrator', 'After Effects', 'Premiere Pro', 'Adobe Creative Cloud'].map(tool => (
-                    <span key={tool} className="px-3 py-1.5 rounded-full bg-blue-600/10 text-blue-600 text-[9px] font-bold uppercase tracking-wider">{tool}</span>
-                  ))}
-                </div>
+              <span className="font-simple text-[10px] font-black uppercase tracking-[0.3em] opacity-40 group-hover:opacity-100 transition-opacity">Return</span>
+            </motion.button>
+
+            {/* Colored Portrait */}
+            <div className={`relative aspect-[3/4] rounded-[45px] overflow-hidden border transition-all duration-1000 ${
+              isDark ? 'border-white/10 bg-slate-900 shadow-2xl' : 'border-blue-100 bg-white shadow-xl shadow-blue-900/5'
+            }`}>
+              <img 
+                src="https://i.ibb.co/LdXvxY3b/B0006.png" 
+                alt="Barakat Qurtas" 
+                className="w-full h-full object-cover scale-105"
+              />
+            </div>
+
+            {/* Software Proficiency */}
+            <div className={`p-6 rounded-[35px] border ${isDark ? 'border-white/5 bg-white/[0.02]' : 'border-blue-50 bg-white'}`}>
+              <p className="font-simple text-[8px] font-black uppercase tracking-[0.3em] opacity-30 mb-4 text-center">Software Arsenal</p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {tools.map(tool => (
+                  <span key={tool} className={`px-3 py-1.5 rounded-xl border text-[8px] font-bold uppercase tracking-widest ${isDark ? 'border-white/5 bg-white/5 text-slate-300' : 'border-blue-50 bg-blue-50/50 text-blue-600'}`}>
+                    {tool}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Download Button */}
+            <motion.a
+              href="#" 
+              whileHover={{ scale: 1.02, y: -2 }}
+              className={`flex items-center justify-center gap-3 w-full py-5 rounded-3xl font-simple text-[9px] font-black uppercase tracking-[0.4em] transition-all shadow-xl ${
+                isDark ? 'bg-white text-slate-950' : 'bg-slate-950 text-white'
+              }`}
+            >
+              Download Portfolio <Download size={14} />
+            </motion.a>
+
+            {/* Hobbies & Values */}
+            <div className={`p-7 rounded-[40px] border transition-all duration-500 ${isDark ? 'border-white/5 bg-blue-600/[0.03]' : 'border-blue-50 bg-blue-50/20'}`}>
+              <div className="flex items-center justify-center gap-2 mb-5">
+                <Heart size={14} className="text-blue-600" />
+                <span className="font-simple text-[8px] font-black uppercase tracking-[0.4em] opacity-40">Identity & Ethics</span>
+              </div>
+              <div className="flex flex-wrap justify-center gap-2">
+                {hobbies.map(hobby => (
+                  <span key={hobby} className={`px-4 py-2 rounded-2xl border text-[9px] font-bold tracking-wider ${isDark ? 'border-white/5 bg-white/5 text-slate-400' : 'border-blue-50 bg-white text-blue-800'}`}>
+                    {hobby}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-8">
-            <motion.div
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 1 }}
-            >
-              <h1 className="font-simple text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85] mb-12">
-                Visual <br /> <span className="text-blue-600 italic font-liana tracking-normal capitalize">Chronicle</span>
-              </h1>
-
-              <div className="relative mb-12">
-                <Quote size={40} className="text-blue-600 opacity-10 absolute -top-8 -left-6" />
-                <p className={`font-simple text-lg md:text-xl leading-relaxed font-medium italic ${textColor}`}>
-                  "It doesn't matter where I work now or where I work in the future, but it is always important to be satisfied with others."
-                </p>
+          {/* RIGHT SIDE: CONTENT */}
+          <div className="lg:col-span-8 space-y-12 pb-20">
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <span className="font-simple text-[10px] font-black uppercase tracking-[0.4em] text-blue-500">About me</span>
+                <div className="h-[1px] flex-grow bg-blue-600/10" />
               </div>
+              <h1 className="font-simple text-6xl md:text-9xl font-black uppercase tracking-tighter leading-[0.8]">
+                Visual <br /> <span className="text-blue-600 italic font-liana tracking-normal capitalize">Architecture</span>
+              </h1>
+            </div>
 
-              <div className={`space-y-8 font-simple text-sm md:text-base leading-relaxed ${subTextColor}`}>
-                <p>
-                  I am Barakat Qartas, a visual architect based in Erbil. Life in Erbil and getting to know different cultures closely has a different enjoyment relationship. In the evening, the colorful view of magical evenings is our rest.
+            <div className="space-y-14">
+              <div className="space-y-6">
+                <p className={`font-simple text-xl md:text-2xl font-bold leading-tight ${textColor}`}>
+                  I am <span className="text-blue-600">Barakat Qurtas</span>. Born in 1997 in Soran, my life is a journey of transforming early curiosity into digital excellence.
                 </p>
                 
-                <div className="flex items-start gap-6 py-6">
-                   <div className="w-12 h-12 rounded-2xl bg-blue-600/10 flex items-center justify-center flex-shrink-0 text-blue-600">
-                     <Sparkles size={24} />
+                <p className={`font-simple text-base md:text-lg leading-relaxed ${subTextColor}`}>
+                  I spent my childhood and completed my high school in the serene mountains of Soran. For many years now, Erbil has been my home. While the mountains were once our place of rest, today, the colorful and magical evenings of Erbil provide the sanctuary for my creative spirit. Getting to know Erbil’s diverse cultures has added a unique enjoyment and depth to my relationship with design.
+                </p>
+              </div>
+
+              {/* Early Roots Block */}
+              <div className={`p-8 md:p-12 rounded-[50px] border relative overflow-hidden ${isDark ? 'border-white/5 bg-white/[0.02]' : 'border-blue-50 bg-blue-50/10'}`}>
+                <div className="flex items-start gap-6 relative z-10">
+                   <Quote className="text-blue-600 shrink-0" size={40} />
+                   <div className="space-y-4">
+                     <p className={`font-simple text-lg md:text-xl italic font-semibold leading-relaxed ${textColor}`}>
+                       "My passion for graphic design and typography was born in childhood. I began experimenting with Microsoft Word as a design tool at the age of 12. By 17, I found myself completely immersed in the profound profession of visual creation."
+                     </p>
                    </div>
-                   <p>
-                    Since childhood, I had a passion for graphic design and typography. I am 25 years old and do a good level graphic design and my work bears witness to my words.
-                   </p>
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-8 border-y border-blue-500/10">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3 text-blue-600">
-                      <Award size={18} />
-                      <span className="text-[10px] font-black uppercase tracking-[0.3em]">Education</span>
-                    </div>
-                    <p className={`text-sm font-bold ${textColor}`}>Law Graduate - Erbil Polytechnic University</p>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3 text-blue-600">
-                      <Sparkles size={18} />
-                      <span className="text-[10px] font-black uppercase tracking-[0.3em]">Ambition</span>
-                    </div>
-                    <p className={`text-sm font-bold ${textColor}`}>Owning a major advertising & publishing firm</p>
-                  </div>
-                </div>
-
-                <div className="pt-10 flex flex-col gap-2">
-                  <span className={`font-liana text-3xl text-blue-600`}>Barakat Qurtas</span>
-                  <span className={`font-simple text-[10px] font-black uppercase tracking-[0.5em] opacity-40`}>Graphic Designer</span>
+                <div className="absolute top-0 right-0 p-4 opacity-5">
+                  <Sparkles size={120} />
                 </div>
               </div>
-            </motion.div>
+
+              {/* Work & Testimony */}
+              <div className="space-y-6">
+                <p className={`font-simple text-base md:text-lg leading-relaxed ${subTextColor}`}>
+                  At 25, I deliver high-level graphic design solutions where <span className="text-blue-600 font-bold">my work bears witness to my words</span>. My technical expertise spans the entire Adobe Creative Cloud—Photoshop for intricate design, Illustrator for vector mastery, and After Effects & Premiere Pro for dynamic video storytelling.
+                </p>
+              </div>
+
+              {/* Education & Achievements */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className={`p-8 rounded-[40px] border ${isDark ? 'border-white/5 bg-white/[0.03]' : 'border-blue-50 bg-white shadow-sm'}`}>
+                  <GraduationCap className="text-blue-600 mb-4" size={24} />
+                  <h4 className={`font-simple text-xs font-black uppercase tracking-widest mb-2 ${textColor}`}>Legal Foundations</h4>
+                  <p className={`font-simple text-sm leading-relaxed ${subTextColor}`}>
+                    A Law Graduate from Erbil Polytechnic University. This academic depth gives my design work a unique sense of structure, order, and ethical precision.
+                  </p>
+                </div>
+                <div className={`p-8 rounded-[40px] border ${isDark ? 'border-white/5 bg-white/[0.03]' : 'border-blue-50 bg-white shadow-sm'}`}>
+                  <Award className="text-blue-600 mb-4" size={24} />
+                  <h4 className={`font-simple text-xs font-black uppercase tracking-widest mb-2 ${textColor}`}>Mastery Certified</h4>
+                  <p className={`font-simple text-sm leading-relaxed ${subTextColor}`}>
+                    Holder of multiple separate, intermediate, and Graphic Design Masterclass certificates, dedicated to the philosophy of "Learn GREAT Design."
+                  </p>
+                </div>
+              </div>
+
+              {/* Career Highlights */}
+              <div className={`p-10 rounded-[45px] border ${isDark ? 'border-white/5 bg-slate-900/40' : 'border-blue-50 bg-white'}`}>
+                <div className="flex items-center gap-3 mb-10">
+                  <ShieldCheck className="text-blue-600" size={20} />
+                  <span className="font-simple text-[9px] font-black uppercase tracking-[0.3em] opacity-40">Institutional Excellence</span>
+                </div>
+                <div className="space-y-8">
+                  <div className="group flex justify-between items-center py-4 border-b border-blue-600/5 hover:border-blue-600/20 transition-colors">
+                    <div className="flex flex-col">
+                      <span className={`font-simple text-lg font-bold ${textColor}`}>Kurdistan Region Presidency</span>
+                      <span className={`text-xs ${subTextColor}`}>Senior Visual Design</span>
+                    </div>
+                    <Star className="text-blue-600 opacity-20 group-hover:opacity-100 transition-opacity" size={16} />
+                  </div>
+                  <div className="group flex justify-between items-center py-4">
+                    <div className="flex flex-col">
+                      <span className={`font-simple text-lg font-bold ${textColor}`}>KRG - Protocol Department</span>
+                      <span className={`text-xs ${subTextColor}`}>Governmental Branding & Visuals</span>
+                    </div>
+                    <Star className="text-blue-600 opacity-20 group-hover:opacity-100 transition-opacity" size={16} />
+                  </div>
+                </div>
+              </div>
+
+              {/* The DREAM Section - Stylized Visual Block */}
+              <motion.div 
+                whileHover={{ y: -5 }}
+                className={`p-10 md:p-14 rounded-[55px] border-2 border-blue-600/20 bg-gradient-to-br ${isDark ? 'from-blue-600/10 to-transparent' : 'from-blue-50 to-white'} relative overflow-hidden`}
+              >
+                <div className="relative z-10 space-y-6">
+                  <div className="flex items-center gap-3">
+                    <Rocket className="text-blue-600" size={20} />
+                    <span className="font-simple text-[9px] font-black uppercase tracking-[0.5em] text-blue-600">The Vision</span>
+                  </div>
+                  <h3 className={`font-simple text-2xl md:text-3xl font-black uppercase tracking-tight leading-tight ${textColor}`}>
+                    "I would like to be able to use my work more and dream of owning a <span className="text-blue-600">big advertising and publishing company</span> in the future."
+                  </h3>
+                  <div className="h-[2px] w-24 bg-blue-600 rounded-full" />
+                </div>
+                <div className="absolute -bottom-10 -right-10 opacity-5 pointer-events-none">
+                   <Rocket size={240} />
+                </div>
+              </motion.div>
+
+              {/* The Satisfaction / Philosophy Section - Stylized Philosophy Block */}
+              <div className="py-16 border-t border-blue-600/10 flex flex-col items-center text-center">
+                 <CheckCircle className="text-blue-600 mb-8 opacity-30" size={36} />
+                 <p className={`font-simple text-xl md:text-2xl font-bold leading-relaxed max-w-3xl italic ${textColor}`}>
+                   "It doesn't matter where I work now or where I work in the future, but it is always important to be satisfied with others."
+                 </p>
+                 <div className="flex items-center gap-5 mt-10">
+                   <div className="w-10 h-[1px] bg-blue-600/20" />
+                   <span className="font-simple text-[10px] font-black uppercase tracking-[0.6em] opacity-40">Core Philosophy</span>
+                   <div className="w-10 h-[1px] bg-blue-600/20" />
+                 </div>
+              </div>
+
+              {/* FINAL SIGNATURE LOGO - Smaller and balanced capitalization */}
+              <div className="pt-20 pb-16">
+                <div className="flex flex-col items-center justify-center gap-6">
+                  <div className="flex flex-col items-center text-center">
+                    {/* Updated to Barakat Qurtas with capitalized B and Q as requested */}
+                    <span className="font-liana text-5xl md:text-6xl text-blue-600 leading-none tracking-tight">Barakat Qurtas</span>
+                    <div className="h-[1px] w-12 bg-blue-600/30 mt-4 rounded-full" />
+                  </div>
+                  
+                  <div className="flex flex-col items-center gap-2">
+                    <p className={`font-simple text-[10px] md:text-[11px] font-black uppercase tracking-[0.6em] ${textColor}`}>Graphic Designer</p>
+                    <div className="flex items-center gap-2 text-blue-600/50">
+                      <MapPin size={12} />
+                      <span className="font-simple text-[8px] font-bold uppercase tracking-[0.3em]">Erbil - Kurdistan Region, Iraq</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="absolute top-0 right-0 w-1/3 h-1/2 bg-blue-600/5 blur-[120px] rounded-full pointer-events-none -z-10" />
+      <Footer theme={theme} setActiveRoom={(room) => {
+         const root = document.getElementById('root');
+         if (root) root.scrollTo({ top: 0, behavior: 'smooth' });
+         onBack();
+      }} />
     </motion.div>
   );
 };

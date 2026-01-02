@@ -8,25 +8,24 @@ interface ClientsGridProps {
 }
 
 const ClientsGrid: React.FC<ClientsGridProps> = ({ theme }) => {
+  // 16 logos ordered precisely from 1 to 16
   const logos = [
-    'https://cdn-icons-png.flaticon.com/512/5968/5968204.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968218.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968313.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968322.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968213.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968242.png',
-    'https://cdn-icons-png.flaticon.com/512/882/882731.png',
-    'https://cdn-icons-png.flaticon.com/512/732/732221.png',
-    'https://cdn-icons-png.flaticon.com/512/732/732190.png',
-    'https://cdn-icons-png.flaticon.com/512/732/732229.png',
-    'https://cdn-icons-png.flaticon.com/512/732/732205.png',
-    'https://cdn-icons-png.flaticon.com/512/732/732228.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968263.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968252.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968334.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968235.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968249.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968222.png',
+    'https://i.ibb.co/xSZsMTSs/1.png',
+    'https://i.ibb.co/gZnsqwCV/2.png',
+    'https://i.ibb.co/4R9jnCkp/3.png',
+    'https://i.ibb.co/pBWqZk2c/4.png',
+    'https://i.ibb.co/sdMCCcnc/5.png',
+    'https://i.ibb.co/Y4V13rZ6/6.png',
+    'https://i.ibb.co/LXttjRQc/7.png',
+    'https://i.ibb.co/HfDbJLpN/8.png',
+    'https://i.ibb.co/x8dMRHtt/9.png',
+    'https://i.ibb.co/YFf6s62p/10.png',
+    'https://i.ibb.co/Lh2DvnRb/11.png',
+    'https://i.ibb.co/rRxvvsW6/12.png',
+    'https://i.ibb.co/1Y4Nm3n8/13.png',
+    'https://i.ibb.co/chcM1hBn/14.png',
+    'https://i.ibb.co/xqFtwZMN/15.png',
+    'https://i.ibb.co/mCFpvpLv/16.png'
   ];
 
   const clients = logos.map((logo, i) => ({
@@ -36,66 +35,63 @@ const ClientsGrid: React.FC<ClientsGridProps> = ({ theme }) => {
   }));
 
   const isDark = theme === Theme.DARK;
-  const sectionTitleColor = isDark ? 'text-blue-400/50' : 'text-blue-600/40';
-  const headingColor = isDark ? 'text-slate-100' : 'text-slate-900';
 
   return (
-    <section className="py-24 px-4 overflow-hidden">
+    <section id="partners" className="py-24 px-4 relative flex flex-col justify-center overflow-hidden">
       <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-20">
+        <div className="text-center mb-16">
           <motion.p 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className={`font-simple tracking-[1em] uppercase text-[9px] font-black mb-4 ${sectionTitleColor}`}
+            initial={{ opacity: 0, y: 10 }} 
+            whileInView={{ opacity: 0.2, y: 0 }} 
+            transition={{ duration: 1 }}
+            className="font-simple tracking-[0.8em] uppercase text-[8px] font-black mb-3"
           >
             Trust
           </motion.p>
           <motion.h2 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className={`font-simple text-4xl md:text-5xl font-black uppercase tracking-tight ${headingColor}`}
+            initial={{ opacity: 0, y: 20 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="font-simple text-3xl md:text-5xl font-black uppercase tracking-tight"
           >
             Strategic Partners
           </motion.h2>
           <motion.div 
             initial={{ width: 0 }}
-            whileInView={{ width: 40 }}
-            viewport={{ once: true }}
+            whileInView={{ width: 48 }}
+            transition={{ duration: 1.5, delay: 0.5 }}
             className="h-[2px] bg-blue-600/30 mx-auto mt-6 rounded-full" 
           />
         </div>
 
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-6 md:gap-8">
+        {/* 8 columns for exactly 2 rows of 16 logos */}
+        <div className="grid grid-cols-4 md:grid-cols-8 gap-3 md:gap-4">
           {clients.map((client, idx) => (
             <motion.div
               key={client.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: (idx % 6) * 0.05, duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
+              initial={{ opacity: 0, scale: 0.9, y: 20, filter: 'blur(10px)' }}
+              whileInView={{ opacity: 1, scale: 1, y: 0, filter: 'blur(0px)' }}
               viewport={{ once: true }}
-              className={`aspect-square rounded-[35px] md:rounded-[45px] flex items-center justify-center p-6 md:p-8 transition-all duration-700 relative group overflow-hidden border backdrop-blur-3xl ${
-                isDark 
-                  ? 'bg-white/[0.02] border-white/5 hover:bg-white/[0.05] shadow-2xl' 
-                  : 'bg-slate-900/[0.02] border-slate-900/5 hover:bg-slate-900/[0.04] shadow-sm'
+              transition={{ 
+                delay: (idx % 8) * 0.05, 
+                duration: 1.2, 
+                ease: [0.16, 1, 0.3, 1] 
+              }}
+              className={`aspect-square rounded-[20px] flex items-center justify-center p-3 border transition-all duration-700 group cursor-none ${
+                isDark ? 'bg-white/[0.03] border-white/5 hover:bg-white/[0.08]' : 'bg-slate-900/[0.02] border-slate-900/5 hover:bg-slate-900/[0.04]'
               }`}
             >
-              {/* Soft Inner Glow on Hover */}
-              <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none ${
-                isDark ? 'bg-gradient-to-br from-blue-500/10 to-transparent' : 'bg-gradient-to-br from-blue-600/5 to-transparent'
-              }`} />
-              
-              <img 
+              <motion.img 
                 src={client.logo} 
+                whileHover={{ scale: 1.1 }}
+                className="w-full h-full object-contain grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 ease-out"
                 alt={client.name}
-                className={`w-full h-full object-contain grayscale transition-all duration-1000 group-hover:scale-110 group-hover:grayscale-0 opacity-15 group-hover:opacity-100`}
               />
             </motion.div>
           ))}
         </div>
       </div>
+      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/10 to-transparent" />
     </section>
   );
 };

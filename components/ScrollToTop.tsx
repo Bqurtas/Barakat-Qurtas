@@ -12,18 +12,32 @@ const ScrollToTop: React.FC<ScrollToTopProps> = ({ theme }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    const root = document.getElementById('root');
     const toggleVisibility = () => {
-      if (window.scrollY > 300) {
+      if (root && root.scrollTop > 300) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
       }
     };
-    window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    
+    if (root) {
+      root.addEventListener('scroll', toggleVisibility);
+    }
+    
+    return () => {
+      if (root) root.removeEventListener('scroll', toggleVisibility);
+    };
   }, []);
 
   const isDark = theme === Theme.DARK;
+
+  const scrollToTop = () => {
+    const root = document.getElementById('root');
+    if (root) {
+      root.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -42,7 +56,7 @@ const ScrollToTop: React.FC<ScrollToTopProps> = ({ theme }) => {
           />
           
           <motion.button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={scrollToTop}
             whileHover={{ scale: 1.1, backgroundColor: '#2563eb', color: '#fff' }}
             whileTap={{ scale: 0.9 }}
             className={`w-12 h-12 rounded-2xl border flex items-center justify-center transition-all duration-500 shadow-2xl backdrop-blur-xl ${

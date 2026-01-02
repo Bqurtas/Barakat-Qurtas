@@ -11,7 +11,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ theme }) => {
   const [isPointer, setIsPointer] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   
-  const springConfig = { damping: 35, stiffness: 400 };
+  const springConfig = { damping: 40, stiffness: 500 };
   const cursorX = useSpring(0, springConfig);
   const cursorY = useSpring(0, springConfig);
 
@@ -44,43 +44,33 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ theme }) => {
     };
   }, [cursorX, cursorY, isVisible]);
 
-  const pointerColor = theme === Theme.DARK ? 'rgba(147, 197, 253, 1)' : 'rgba(37, 99, 235, 1)';
+  const pointerColor = theme === Theme.DARK ? 'rgba(96, 165, 250, 1)' : 'rgba(37, 99, 235, 1)';
 
   if (!isVisible) return null;
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999] hidden lg:block">
-      {/* 1. CORE RING */}
+      {/* OUTER RING */}
       <motion.div
-        style={{
-          x: cursorX,
-          y: cursorY,
-          translateX: '-50%',
-          translateY: '-50%',
-        }}
+        style={{ x: cursorX, y: cursorY, translateX: '-50%', translateY: '-50%' }}
         animate={{
-          scale: isPointer ? 1.5 : 1,
+          scale: isPointer ? 1.6 : 1,
           borderColor: pointerColor,
-          borderWidth: isPointer ? '2px' : '1px',
+          borderWidth: isPointer ? '3px' : '1px',
           opacity: isVisible ? 1 : 0
         }}
         className="absolute w-12 h-12 rounded-full border transition-colors duration-500 z-20"
       />
 
-      {/* 2. CENTRAL DOT */}
+      {/* CENTRAL SPARK */}
       <motion.div
-        style={{
-          x: cursorX,
-          y: cursorY,
-          translateX: '-50%',
-          translateY: '-50%',
-        }}
+        style={{ x: cursorX, y: cursorY, translateX: '-50%', translateY: '-50%' }}
         animate={{
           scale: isPointer ? 0 : 1,
           backgroundColor: pointerColor,
           opacity: isVisible ? 1 : 0
         }}
-        className="absolute w-2 h-2 rounded-full z-30 shadow-[0_0_10px_rgba(37,99,235,0.8)]"
+        className="absolute w-1.5 h-1.5 rounded-full z-30 shadow-[0_0_10px_rgba(37,99,235,0.8)]"
       />
     </div>
   );

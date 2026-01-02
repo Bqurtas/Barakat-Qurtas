@@ -1,85 +1,166 @@
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState, useRef } from 'react';
+import { motion, useInView, animate } from 'framer-motion';
 import { Theme } from '../types';
 
 interface LogoTickerProps {
   theme: Theme;
 }
 
+interface CounterProps {
+  value: string;
+  label: string;
+  theme: Theme;
+}
+
+const Counter: React.FC<CounterProps> = ({ value, label, theme }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isDark = theme === Theme.DARK;
+
+  const numericTarget = parseInt(value.replace(/[^0-9]/g, ''));
+  const prefix = value.startsWith('+') ? '+' : '';
+  const suffix = value.endsWith('+') ? '+' : '';
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(0, numericTarget, {
+        duration: 3,
+        ease: [0.16, 1, 0.3, 1],
+        onUpdate: (latest) => setDisplayValue(Math.floor(latest)),
+      });
+      return () => controls.stop();
+    }
+  }, [isInView, numericTarget]);
+
+  return (
+    <motion.div 
+      ref={ref}
+      initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
+      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+      className="flex flex-col items-center cursor-default group"
+    >
+      <div className="relative mb-2">
+        <motion.span 
+          className={`font-arch text-4xl md:text-7xl font-black transition-all duration-700 block ${
+            isDark ? 'text-white' : 'text-slate-900'
+          }`}
+        >
+          {prefix}{displayValue}{suffix}
+        </motion.span>
+        <div className={`h-[2px] w-12 mx-auto mt-2 rounded-full transition-all duration-700 group-hover:w-20 ${isDark ? 'bg-blue-500/40' : 'bg-blue-600/30'}`} />
+      </div>
+      
+      <span className={`font-simple text-[10px] font-black uppercase tracking-[0.6em] ${
+        isDark ? 'text-white/20 group-hover:text-blue-400' : 'text-slate-900/20 group-hover:text-blue-600'
+      } transition-colors duration-500`}>
+        {label}
+      </span>
+    </motion.div>
+  );
+};
+
 const LogoTicker: React.FC<LogoTickerProps> = ({ theme }) => {
+  // 20 new URLs provided by the user
   const logos = [
-    'https://cdn-icons-png.flaticon.com/512/5968/5968204.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968218.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968313.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968322.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968213.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968242.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968204.png',
-    'https://cdn-icons-png.flaticon.com/512/5968/5968218.png',
+    'https://i.ibb.co/bMjvRWP4/765431.png',
+    'https://i.ibb.co/1V97hVS/765433.png',
+    'https://i.ibb.co/cS9JXPWr/765436.png',
+    'https://i.ibb.co/KpwP3FC2/7654310.png',
+    'https://i.ibb.co/7JzrSsQm/7654312.png',
+    'https://i.ibb.co/B2LNWnvD/7654314.png',
+    'https://i.ibb.co/Y4YB3bdy/7654315.png',
+    'https://i.ibb.co/fBghbQg/7654318.png',
+    'https://i.ibb.co/cXv1Fj0r/7654320.png',
+    'https://i.ibb.co/TMb4hQXX/7654322.png',
+    'https://i.ibb.co/HL5D6Q1n/7654324.png',
+    'https://i.ibb.co/wZptbMz2/7654328.png',
+    'https://i.ibb.co/S7xzQWKZ/7654330.png',
+    'https://i.ibb.co/vxRjG5tm/7654332.png',
+    'https://i.ibb.co/fzgq1D3L/7654336.png',
+    'https://i.ibb.co/v9TBBww/7654340.png',
+    'https://i.ibb.co/1JpBrFML/7654342.png',
+    'https://i.ibb.co/cX3bz9Mq/31414135458.png',
+    'https://i.ibb.co/8t7qd19/314141354512.png',
+    'https://i.ibb.co/DHNw6pQK/342653454368.png'
   ];
 
-  const duplicatedLogos = [...logos, ...logos, ...logos];
+  // Infinite duplication for the ticker
+  const duplicatedLogos = [...logos, ...logos, ...logos, ...logos];
+
+  const statsData = [
+    { label: 'Designs', value: '+1000' },
+    { label: 'Clients', value: '25+' },
+    { label: 'Logos', value: '20+' },
+    { label: 'Books', value: '100+' },
+  ];
 
   const isDark = theme === Theme.DARK;
   const fadeColor = isDark ? 'from-[#0a0f14]' : 'from-[#f8fafc]';
 
   return (
-    <section className="py-24 overflow-hidden relative">
-      {/* Side Fades */}
-      <div className={`absolute inset-y-0 left-0 w-32 md:w-80 z-20 pointer-events-none bg-gradient-to-r ${fadeColor} via-transparent to-transparent`} />
-      <div className={`absolute inset-y-0 right-0 w-32 md:w-80 z-20 pointer-events-none bg-gradient-to-l ${fadeColor} via-transparent to-transparent`} />
+    <section id="collaborations" className="py-32 overflow-hidden relative flex flex-col justify-center min-h-screen">
+      <div className={`absolute inset-y-0 left-0 w-48 z-20 pointer-events-none bg-gradient-to-r ${fadeColor} via-transparent to-transparent`} />
+      <div className={`absolute inset-y-0 right-0 w-48 z-20 pointer-events-none bg-gradient-to-l ${fadeColor} via-transparent to-transparent`} />
       
-      <div className="mb-20 text-center relative z-10">
-        <div className="flex items-center justify-center gap-4 mb-4">
-          <div className={`h-[1px] w-8 ${isDark ? 'bg-blue-500/20' : 'bg-blue-600/10'}`} />
-          <h3 className="font-simple text-[9px] md:text-[10px] font-black uppercase tracking-[1em] opacity-40">
-            Identity Heritage
-          </h3>
-          <div className={`h-[1px] w-8 ${isDark ? 'bg-blue-500/20' : 'bg-blue-600/10'}`} />
-        </div>
-        <p className={`font-liana text-2xl ${isDark ? 'text-blue-500/40' : 'text-blue-600/30'}`}>World Class Collaborations</p>
+      <div className="mb-24 text-center px-6">
+        <motion.p 
+          initial={{ opacity: 0, tracking: '0.2em' }} 
+          whileInView={{ opacity: 0.3, tracking: '0.8em' }} 
+          transition={{ duration: 1.5 }}
+          className="font-simple uppercase text-[9px] font-black mb-4"
+        >
+          Milestones
+        </motion.p>
+        <motion.h2 
+          initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }} 
+          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }} 
+          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          className="font-simple text-4xl md:text-6xl font-black uppercase tracking-tight leading-none"
+        >
+          Global Impact
+        </motion.h2>
       </div>
 
-      <div className="relative group">
-        {/* The Ticker with Reflection Effect */}
-        <div className="relative">
+      <div id="statistics" className="container mx-auto max-w-6xl px-6 mb-40">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 md:gap-24">
+          {statsData.map((stat, idx) => (
+            <Counter key={idx} value={stat.value} label={stat.label} theme={theme} />
+          ))}
+        </div>
+      </div>
+
+      <div className="relative w-full overflow-hidden flex items-center h-28 md:h-36">
+        <div className="flex w-max items-center">
           <motion.div 
-            className="flex gap-24 md:gap-44 items-center"
-            animate={{ x: [0, -1500] }}
-            transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+            animate={{ x: [0, -2000] }}
+            transition={{ 
+              duration: 45, 
+              repeat: Infinity, 
+              ease: "linear" 
+            }}
+            className="flex items-center gap-24 md:gap-40 pr-24 md:pr-40"
           >
             {duplicatedLogos.map((logo, idx) => (
-              <div key={idx} className="flex flex-col items-center gap-8">
-                {/* Main Logo */}
-                <div className="flex-shrink-0 w-12 h-12 md:w-16 md:h-16 grayscale hover:grayscale-0 transition-all duration-1000 cursor-pointer flex items-center justify-center opacity-20 hover:opacity-100">
-                  <img src={logo} alt="Project Logo" className="max-w-full max-h-full object-contain" />
-                </div>
-                
-                {/* Classy Reflection */}
-                <div className="flex-shrink-0 w-12 h-12 md:w-16 md:h-16 grayscale opacity-[0.02] scale-y-[-1] pointer-events-none blur-[2px]">
-                  <img src={logo} alt="Reflection" className="max-w-full max-h-full object-contain" />
-                </div>
+              <div key={idx} className="flex-shrink-0 flex items-center justify-center">
+                <motion.img 
+                  src={logo} 
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  whileHover={{ scale: 1.1, opacity: 1 }}
+                  className="h-14 md:h-20 w-auto grayscale opacity-10 transition-all duration-700 cursor-none" 
+                  alt="Partner logo"
+                  style={{ maxWidth: 'none', objectFit: 'contain' }}
+                />
               </div>
             ))}
           </motion.div>
-
-          {/* Mask for reflection fading */}
-          <div className={`absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t ${isDark ? 'from-[#0a0f14]' : 'from-[#f8fafc]'} to-transparent z-10 pointer-events-none`} />
-        </div>
-
-        {/* Soft Footer Info (No hard lines) */}
-        <div className="container mx-auto max-w-4xl px-6 mt-12">
-          <div className="flex justify-between items-center opacity-20 font-simple text-[7px] uppercase tracking-[0.4em] font-black px-2">
-            <span>Premium Output</span>
-            <span>Est. 2012</span>
-            <span>Global Standard</span>
-          </div>
         </div>
       </div>
-
-      {/* Ambient background glow */}
-      <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-blue-600/[0.02] blur-[150px] pointer-events-none -z-10`} />
+      
+      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/10 to-transparent" />
     </section>
   );
 };
