@@ -38,7 +38,7 @@ const Counter: React.FC<CounterProps> = ({ value, label, theme }) => {
       ref={ref}
       initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
       whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
       className="flex flex-col items-center cursor-default group"
     >
       <div className="relative mb-2">
@@ -106,7 +106,7 @@ const LogoTicker: React.FC<LogoTickerProps> = ({ theme }) => {
         <motion.p 
           initial={{ opacity: 0, tracking: '0.2em' }} 
           whileInView={{ opacity: 0.3, tracking: '0.8em' }} 
-          transition={{ duration: 1.5 }}
+          transition={{ duration: 1 }}
           className="font-simple uppercase text-[9px] font-black mb-4"
         >
           Milestones
@@ -114,7 +114,7 @@ const LogoTicker: React.FC<LogoTickerProps> = ({ theme }) => {
         <motion.h2 
           initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }} 
           whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }} 
-          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           className="font-simple text-4xl md:text-6xl font-[900] uppercase tracking-tight leading-none"
         >
           Statistics
@@ -140,11 +140,11 @@ const LogoTicker: React.FC<LogoTickerProps> = ({ theme }) => {
       </div>
 
       <div className="relative w-full overflow-hidden flex items-center h-40 md:h-56">
-        <div className="flex w-max items-center">
+        <div className="flex w-max items-center will-change-transform">
           <motion.div 
             animate={{ x: [0, -2000] }}
             transition={{ 
-              duration: 45, 
+              duration: 30, // Rocket Speed: Faster and smoother
               repeat: Infinity, 
               ease: "linear" 
             }}
@@ -158,9 +158,9 @@ const LogoTicker: React.FC<LogoTickerProps> = ({ theme }) => {
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   whileHover={{ scale: 1.1, opacity: 1 }}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-24 md:h-36 w-auto grayscale opacity-25 transition-all duration-700 cursor-none" 
+                  fetchpriority="high"
+                  decoding="sync"
+                  className="h-24 md:h-36 w-auto grayscale opacity-25 transition-all duration-700 cursor-none rocket-img" 
                   alt="Partner logo"
                   style={{ maxWidth: 'none', objectFit: 'contain' }}
                 />

@@ -17,7 +17,7 @@
     <link rel="dns-prefetch" href="https://i.ibb.co" />
     <link rel="dns-prefetch" href="https://esm.sh" />
 
-    <!-- Preload Critical Assets -->
+    <!-- Preload Critical Assets (UI & Hero) -->
     <link rel="preload" href="https://static.wfonts.com/data/2016/07/03/liana/Liana.otf" as="font" type="font/otf" crossorigin="anonymous" />
     <link rel="preload" href="https://i.ibb.co/SwbjDRf7/095-A7561-2.png" as="image" fetchpriority="high" />
     <link rel="preload" href="https://i.ibb.co/D3h6b89/Barakat-Qurtas.png" as="image" fetchpriority="high" />
@@ -79,7 +79,8 @@
         margin: 0;
         padding: 0;
         overflow: hidden;
-        image-rendering: -webkit-optimize-contrast; /* خێراکردنی ڕێندەری وێنە */
+        image-rendering: -webkit-optimize-contrast; 
+        -webkit-font-smoothing: antialiased;
       }
 
       #root {
@@ -93,7 +94,6 @@
       body {
         background-color: #0a0f14;
         font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-        -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
       }
 
@@ -112,7 +112,8 @@
         flex-direction: column;
         justify-content: center;
         position: relative;
-        will-change: transform; /* ئامادەکردنی کارت گرافیک */
+        will-change: transform; 
+        content-visibility: auto; 
       }
 
       @media (pointer: fine) {
@@ -148,6 +149,14 @@
       @keyframes mesh-move {
         0% { transform: translate3d(0, 0, 0) scale(1); }
         100% { transform: translate3d(20%, 30%, 0) scale(1.5); }
+      }
+
+      /* Rocket Speed CSS: Force Sync Decoding for preloaded classes */
+      .rocket-img {
+        image-rendering: -webkit-optimize-contrast;
+        backface-visibility: hidden;
+        transform: translateZ(0);
+        will-change: transform, opacity;
       }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">

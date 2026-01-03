@@ -33,6 +33,8 @@ const BOTTOM_CATEGORIES = [
   { name: 'Image', icon: <Camera size={18} /> },
 ];
 
+const ALL_CAT_NAMES = [...TOP_CATEGORIES, ...BOTTOM_CATEGORIES].map(c => c.name);
+
 interface PortfolioProps { theme: Theme; }
 
 const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
@@ -41,9 +43,34 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
   const [visibleCount, setVisibleCount] = useState(12);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [direction, setDirection] = useState(0);
-  const preloadedTabs = useRef<Set<string>>(new Set(['General Design']));
-
   const isDark = theme === Theme.DARK;
+
+  // Global cache of preloaded Image objects to keep them in browser memory
+  const preloadCache = useRef<Record<string, HTMLImageElement[]>>({});
+
+  // Rocket Speed: Aggressive Pre-warming on mount
+  useEffect(() => {
+    const warmup = () => {
+      ALL_CAT_NAMES.forEach(cat => {
+        if (!preloadCache.current[cat]) {
+          const itemsToWarm = MY_WORKS_DATA.filter(item => item.category === cat).slice(0, 15);
+          preloadCache.current[cat] = itemsToWarm.map(item => {
+            const img = new Image();
+            img.src = item.image;
+            img.fetchPriority = 'high';
+            if (img.decode) img.decode().catch(() => {}); 
+            return img;
+          });
+        }
+      });
+    };
+    
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(warmup);
+    } else {
+      setTimeout(warmup, 50);
+    }
+  }, []);
 
   const filteredItems = useMemo(() => {
     return MY_WORKS_DATA.filter(item => item.category === activeTab);
@@ -51,33 +78,6 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
 
   const displayedItems = filteredItems.slice(0, visibleCount);
   const hasMore = filteredItems.length > visibleCount;
-
-  // Background preloading for hovered tabs - Rocket Speed technique
-  useEffect(() => {
-    if (hoveredTab && !preloadedTabs.current.has(hoveredTab)) {
-      const itemsToPreload = MY_WORKS_DATA.filter(item => item.category === hoveredTab).slice(0, 15);
-      itemsToPreload.forEach(item => {
-        const img = new Image();
-        img.src = item.image;
-      });
-      preloadedTabs.current.add(hoveredTab);
-    }
-  }, [hoveredTab]);
-
-  // Preload next category images during idle time
-  useEffect(() => {
-    if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(() => {
-        const nextCats = [...TOP_CATEGORIES, ...BOTTOM_CATEGORIES].map(c => c.name).filter(n => n !== activeTab);
-        nextCats.slice(0, 2).forEach(cat => {
-          MY_WORKS_DATA.filter(item => item.category === cat).slice(0, 6).forEach(item => {
-            const img = new Image();
-            img.src = item.image;
-          });
-        });
-      });
-    }
-  }, [activeTab]);
 
   const handleLoadMore = () => {
     setVisibleCount(prev => prev + 12);
@@ -168,7 +168,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.1 }}
               className="absolute inset-0 z-0 pointer-events-none rounded-full shadow-[0_0_30px_rgba(93,103,232,0.3)]"
             />
           )}
@@ -257,14 +257,14 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
                   initial={{ opacity: 0, scale: 0.99 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.99 }}
-                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  transition={{ duration: 0.1, ease: "easeOut" }}
                   className="relative flex flex-col items-center justify-center pointer-events-auto"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <img 
                     src={selectedWork.image} 
                     alt={selectedWork.title} 
-                    className="max-w-[85vw] max-h-[75vh] object-contain rounded-sm shadow-[0_50px_100px_rgba(0,0,0,1)] select-none pointer-events-none"
+                    className="max-w-[85vw] max-h-[75vh] object-contain rounded-sm shadow-[0_50px_100px_rgba(0,0,0,1)] select-none pointer-events-none rocket-img"
                     draggable="false"
                     decoding="sync"
                     fetchpriority="high"
@@ -281,7 +281,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
           <motion.p 
             initial={{ opacity: 0, y: 10 }} 
             whileInView={{ opacity: 0.2, y: 0 }} 
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.8 }}
             className="font-simple tracking-[0.8em] uppercase text-[8px] font-black mb-3"
           >
             Exhibition
@@ -289,7 +289,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
           <motion.h2 
             initial={{ opacity: 0, y: 20 }} 
             whileInView={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             className="font-simple text-3xl md:text-5xl font-black uppercase tracking-tight"
           >
             The Designs
@@ -297,7 +297,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
           <motion.div 
             initial={{ width: 0 }}
             whileInView={{ width: 48 }}
-            transition={{ duration: 1.5, delay: 0.5 }}
+            transition={{ duration: 1.2, delay: 0.3 }}
             className="h-[2px] bg-blue-600/30 mx-auto mt-6 rounded-full" 
           />
         </div>
@@ -319,12 +319,13 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: 0.1 }}
             className={`
               ${activeTab === 'Logo' ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4 justify-items-center' : 
                 activeTab === 'Book Covers' ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-20 perspective-[2000px]' : 
                 'columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4'}
             `}
+            style={{ willChange: 'transform, opacity' }}
           >
             {displayedItems.map((item, index) => (
               <motion.div
@@ -348,10 +349,9 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
                          <img 
                           src={item.image} 
                           alt={item.title} 
-                          loading={index < 8 ? "eager" : "lazy"}
                           fetchpriority={index < 8 ? "high" : "auto"}
-                          decoding={index < 8 ? "sync" : "async"}
-                          className="w-full h-full object-cover"
+                          decoding="sync"
+                          className="w-full h-full object-cover rocket-img"
                          />
                          <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 opacity-40 pointer-events-none" />
                        </div>
@@ -365,10 +365,9 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
                       src={item.image} 
                       alt={item.title} 
                       draggable="false"
-                      loading={index < 12 ? "eager" : "lazy"}
                       fetchpriority={index < 12 ? "high" : "auto"}
-                      decoding={index < 12 ? "sync" : "async"}
-                      className={`${activeTab === 'Logo' ? 'w-full h-full object-contain p-2' : 'w-full h-auto object-cover'} transition-transform duration-500 group-hover:scale-105 pointer-events-none will-change-transform`} 
+                      decoding="sync"
+                      className={`${activeTab === 'Logo' ? 'w-full h-full object-contain p-2' : 'w-full h-auto object-cover'} transition-transform duration-500 group-hover:scale-105 pointer-events-none rocket-img`} 
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 z-50">
                        <div className="flex items-center justify-between gap-2">
@@ -419,7 +418,6 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
         .rotate-y-[-15deg] { transform: rotateY(-15deg); }
         .rotate-y-[-90deg] { transform: rotateY(-90deg); }
         .rotate-x-[90deg] { transform: rotateX(90deg); }
-        .will-change-transform { will-change: transform; }
       `}</style>
 
       <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/10 to-transparent" />
