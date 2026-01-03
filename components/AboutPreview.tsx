@@ -79,7 +79,7 @@ const AboutPreview: React.FC<AboutPreviewProps> = ({ theme, onExplore }) => {
               transition={{ duration: 1.2, delay: 0.4 }}
               className={`font-simple text-base md:text-lg leading-relaxed max-w-xl italic font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}
             >
-              "I would like to be able to use my work more and dream of owning a big advertising and publishing company in the future."
+              "It doesn't matter where I work now or where I work in the future, but it is always important to be satisfied with others."
             </motion.p>
 
             <motion.div

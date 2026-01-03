@@ -10,6 +10,7 @@ import {
   Play, 
   Camera,
   Plus,
+  Minus,
   FileText,
   X,
   Maximize2,
@@ -52,7 +53,6 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
   const displayedItems = filteredItems.slice(0, visibleCount);
   const hasMore = filteredItems.length > visibleCount;
 
-  // Rocket Pre-fetching logic: Preload images when user hovers over a category
   useEffect(() => {
     if (hoveredTab && !preloadedTabs.current.has(hoveredTab)) {
       const itemsToPreload = MY_WORKS_DATA.filter(item => item.category === hoveredTab).slice(0, 10);
@@ -66,6 +66,21 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
 
   const handleLoadMore = () => {
     setVisibleCount(prev => prev + 12);
+  };
+
+  const handleShowLess = () => {
+    setVisibleCount(12);
+    const element = document.getElementById('design');
+    if (element) {
+      const headerOffset = 100;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + (document.getElementById('root')?.scrollTop || 0) - headerOffset;
+      
+      document.getElementById('root')?.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
   };
 
   const openLightbox = (index: number) => {
@@ -249,19 +264,27 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
       <div className="container mx-auto max-w-7xl relative z-10 px-6 pb-12">
         <div className="text-center mb-16">
           <motion.p 
-            initial={{ opacity: 0 }} 
-            whileInView={{ opacity: 1 }} 
-            className="font-cursive text-3xl md:text-5xl text-blue-500 mb-2"
+            initial={{ opacity: 0, y: 10 }} 
+            whileInView={{ opacity: 0.2, y: 0 }} 
+            transition={{ duration: 1 }}
+            className="font-simple tracking-[0.8em] uppercase text-[8px] font-black mb-3"
           >
             Exhibition
           </motion.p>
           <motion.h2 
-            initial={{ opacity: 0, y: 10 }} 
+            initial={{ opacity: 0, y: 20 }} 
             whileInView={{ opacity: 1, y: 0 }} 
-            className="font-simple text-4xl md:text-7xl font-[900] uppercase tracking-tighter leading-none"
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="font-simple text-3xl md:text-5xl font-black uppercase tracking-tight"
           >
             The Designs
           </motion.h2>
+          <motion.div 
+            initial={{ width: 0 }}
+            whileInView={{ width: 48 }}
+            transition={{ duration: 1.5, delay: 0.5 }}
+            className="h-[2px] bg-blue-600/30 mx-auto mt-6 rounded-full" 
+          />
         </div>
 
         <motion.div 
@@ -283,7 +306,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
             className={`
-              ${activeTab === 'Logo' ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-3' : 
+              ${activeTab === 'Logo' ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4 justify-items-center' : 
                 activeTab === 'Book Covers' ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-20 perspective-[2000px]' : 
                 'columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4'}
             `}
@@ -295,8 +318,8 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
                 viewport={{ once: true }}
                 onClick={() => openLightbox(index)}
                 className={`
-                  relative group cursor-pointer transition-all duration-300 will-change-transform
-                  ${activeTab === 'Logo' ? 'aspect-square flex items-center justify-center p-0 bg-transparent' : 
+                  relative group cursor-pointer transition-all duration-300 will-change-transform w-full
+                  ${activeTab === 'Logo' ? 'aspect-square flex items-center justify-center p-2 bg-transparent' : 
                     activeTab === 'Book Covers' ? 'flex flex-col items-center' :
                     (isDark ? 'bg-slate-900 border border-white/5 shadow-xl hover:shadow-blue-500/10 rounded-[12px] overflow-hidden' : 'bg-white shadow-lg shadow-blue-900/[0.03] hover:shadow-blue-500/15 rounded-[12px] overflow-hidden')}
                   `
@@ -330,7 +353,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
                       loading="eager"
                       fetchpriority={index < 12 ? "high" : "auto"}
                       decoding="sync"
-                      className={`${activeTab === 'Logo' ? 'w-full h-full object-contain' : 'w-full h-auto object-cover'} transition-transform duration-500 group-hover:scale-105 pointer-events-none will-change-transform`} 
+                      className={`${activeTab === 'Logo' ? 'w-full h-full object-contain p-2' : 'w-full h-auto object-cover'} transition-transform duration-500 group-hover:scale-105 pointer-events-none will-change-transform`} 
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 z-50">
                        <div className="flex items-center justify-between gap-2">
@@ -347,8 +370,8 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
           </motion.div>
         </AnimatePresence>
 
-        {hasMore && (
-          <div className="flex justify-center mt-20">
+        <div className="flex justify-center mt-20">
+          {hasMore ? (
             <motion.button
               onClick={handleLoadMore}
               initial={{ opacity: 0 }}
@@ -359,8 +382,19 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
             >
               Load More <Plus size={16} />
             </motion.button>
-          </div>
-        )}
+          ) : filteredItems.length > 12 && (
+            <motion.button
+              onClick={handleShowLess}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              whileHover={{ scale: 1.05, backgroundColor: '#5D67E8', color: '#fff' }}
+              whileTap={{ scale: 0.95 }}
+              className={`flex items-center gap-4 px-10 py-5 rounded-[18px] border font-simple text-[10px] font-black uppercase tracking-0.4em transition-all duration-300 ${isDark ? 'border-white/10 text-white/40 hover:border-transparent' : 'border-slate-900/10 text-slate-900/40 hover:border-transparent'}`}
+            >
+              Show Less <Minus size={16} />
+            </motion.button>
+          )}
+        </div>
       </div>
 
       <style>{`

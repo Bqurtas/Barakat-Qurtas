@@ -32,7 +32,6 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
     { name: 'Contact', id: 'contact', type: 'room' }
   ];
 
-  // More links for the main strip
   const stripSocialLinks = [
     { icon: <Instagram size={16} />, url: 'https://instagram.com/Bqurtas', label: 'Instagram' },
     { icon: <Facebook size={16} />, url: 'https://facebook.com/Bqurtas', label: 'Facebook' },
@@ -91,7 +90,6 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
           animate={{ 
             y: 0, 
             opacity: 1,
-            // Reduced maxWidth for a shorter, more elegant strip
             maxWidth: scrolled ? '550px' : '920px',
           }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -132,7 +130,6 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
           </div>
 
           <div className="flex items-center gap-1 md:gap-3 flex-shrink-0">
-            {/* Extended Social Icons on the strip (Visible on Desktop) */}
             <div className="hidden lg:flex items-center gap-1 mr-2 border-r border-white/10 pr-3">
               {stripSocialLinks.map((link, idx) => (
                 <motion.a

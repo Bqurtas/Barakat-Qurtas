@@ -12,11 +12,7 @@ import {
   Twitter, 
   Palette, 
   Globe, 
-  MessageCircle,
-  Image as ImageIcon,
-  Layers,
-  FileText,
-  Film
+  MessageCircle
 } from 'lucide-react';
 import { Theme } from '../types';
 
@@ -44,17 +40,18 @@ const Footer: React.FC<FooterProps> = ({ theme, setActiveRoom }) => {
   ];
 
   const skills = [
-    { name: 'Photoshop', percentage: 90, icon: <ImageIcon size={14} />, color: 'bg-blue-500' },
-    { name: 'InDesign', percentage: 80, icon: <FileText size={14} />, color: 'bg-blue-600' },
-    { name: 'Illustrator', percentage: 75, icon: <Layers size={14} />, color: 'bg-blue-400' },
-    { name: 'After Effects', percentage: 65, icon: <Film size={14} />, color: 'bg-indigo-500' },
+    { name: 'Photoshop', percentage: 90, iconUrl: 'https://i.ibb.co/fzJpJPTP/5968572.png', color: 'bg-blue-500' },
+    { name: 'InDesign', percentage: 80, iconUrl: 'https://i.ibb.co/zWYzBKqz/5968535.png', color: 'bg-blue-600' },
+    { name: 'Illustrator', percentage: 75, iconUrl: 'https://i.ibb.co/HTzQFMSN/5968522.png', color: 'bg-blue-400' },
+    { name: 'After Effects', percentage: 65, iconUrl: 'https://i.ibb.co/DD2sF81B/5968474.png', color: 'bg-indigo-500' },
   ];
 
   const navigateTo = (room: 'home' | 'about' | 'contact') => {
     setActiveRoom(room);
-    const root = document.getElementById('root');
-    if (root) root.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // Brand color filter (#5D67E8)
+  const brandFilter = "brightness(0) saturate(100%) invert(43%) sepia(56%) saturate(3015%) hue-rotate(224deg) brightness(91%) contrast(100%)";
 
   return (
     <footer id="footer" className={`relative pt-32 pb-12 overflow-hidden transition-colors duration-1000 ${bgColor}`}>
@@ -129,7 +126,7 @@ const Footer: React.FC<FooterProps> = ({ theme, setActiveRoom }) => {
                 </div>
               </div>
 
-              {/* Technical Mastery - Now Below Social/Nav and arranged in 2x2 grid */}
+              {/* Technical Mastery */}
               <div className="space-y-8">
                 <h4 className="font-simple text-[9px] font-black uppercase tracking-[0.5em] opacity-30">Technical Mastery</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-8">
@@ -137,7 +134,12 @@ const Footer: React.FC<FooterProps> = ({ theme, setActiveRoom }) => {
                     <div key={skill.name} className="space-y-3">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-2">
-                          <span className="text-blue-500">{skill.icon}</span>
+                          <img 
+                            src={skill.iconUrl} 
+                            alt={skill.name} 
+                            style={{ filter: brandFilter, width: '16px', height: '16px' }} 
+                            className="object-contain"
+                          />
                           <span className={`font-simple text-[10px] font-bold tracking-wider uppercase ${textColor}`}>{skill.name}</span>
                         </div>
                         <span className="font-simple text-[9px] font-black text-blue-500/60">{skill.percentage}%</span>

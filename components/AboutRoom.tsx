@@ -21,14 +21,25 @@ const AboutRoom: React.FC<AboutRoomProps> = ({ theme, onBack }) => {
   const isDark = theme === Theme.DARK;
   const textColor = isDark ? 'text-slate-100' : 'text-slate-900';
   const subTextColor = isDark ? 'text-slate-400' : 'text-slate-500';
+  const borderColor = isDark ? 'border-white/5' : 'border-blue-50';
 
   const tools = [
-    'Photoshop', 'Illustrator', 'After Effects', 'Premiere Pro', 'InDesign', 'Lightroom', 'MS Word'
+    'After Effects', 'Premiere Pro', 'Lightroom', 'MS Word'
   ];
 
   const hobbies = [
-    'Traveling', 'Reading', 'Design', 'Law', 'Sports', 'Cleanliness', 'Respect'
+    'Traveling', 'Reading', 'Design', 'Law', 'Sports', 'Respect'
   ];
+
+  const skills = [
+    { name: 'Photoshop', percentage: 90, iconUrl: 'https://i.ibb.co/fzJpJPTP/5968572.png', color: 'bg-blue-600' },
+    { name: 'InDesign', percentage: 80, iconUrl: 'https://i.ibb.co/zWYzBKqz/5968535.png', color: 'bg-blue-600' },
+    { name: 'Illustrator', percentage: 75, iconUrl: 'https://i.ibb.co/HTzQFMSN/5968522.png', color: 'bg-blue-600' },
+    { name: 'After Effects', percentage: 65, iconUrl: 'https://i.ibb.co/DD2sF81B/5968474.png', color: 'bg-blue-600' },
+  ];
+
+  // Brand color filter (#5D67E8)
+  const brandFilter = "brightness(0) saturate(100%) invert(43%) sepia(56%) saturate(3015%) hue-rotate(224deg) brightness(91%) contrast(100%)";
 
   return (
     <motion.div
@@ -41,7 +52,7 @@ const AboutRoom: React.FC<AboutRoomProps> = ({ theme, onBack }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
           {/* LEFT SIDE: STICKY SIDEBAR */}
-          <div className="lg:col-span-4 lg:sticky lg:top-32 space-y-6">
+          <div className="lg:col-span-4 lg:sticky lg:top-32 space-y-6 pb-20">
             <motion.button
               onClick={onBack}
               whileHover={{ x: -5 }}
@@ -64,7 +75,48 @@ const AboutRoom: React.FC<AboutRoomProps> = ({ theme, onBack }) => {
               />
             </div>
 
-            {/* Software Proficiency */}
+            {/* Download Button (CV) - NOW DIRECTLY UNDER PORTRAIT */}
+            <motion.a
+              href="#" 
+              whileHover={{ scale: 1.02, y: -2 }}
+              className={`flex items-center justify-center gap-3 w-full py-5 rounded-3xl font-simple text-[9px] font-black uppercase tracking-[0.4em] transition-all shadow-xl ${
+                isDark ? 'bg-white text-slate-950' : 'bg-slate-950 text-white'
+              }`}
+            >
+              Download Portfolio <Download size={14} />
+            </motion.a>
+
+            {/* Technical Mastery - NEW IN ABOUT ROOM */}
+            <div className={`p-7 rounded-[40px] border ${isDark ? 'border-white/5 bg-white/[0.02]' : 'border-blue-50 bg-white shadow-sm'}`}>
+              <p className="font-simple text-[8px] font-black uppercase tracking-[0.3em] opacity-30 mb-6 text-center">Technical Mastery</p>
+              <div className="space-y-5">
+                {skills.map((skill) => (
+                  <div key={skill.name} className="space-y-2">
+                    <div className="flex justify-between items-center px-1">
+                      <div className="flex items-center gap-2">
+                        <img 
+                          src={skill.iconUrl} 
+                          alt={skill.name} 
+                          style={{ filter: brandFilter, width: '14px', height: '14px' }} 
+                        />
+                        <span className={`font-simple text-[9px] font-bold tracking-wider uppercase ${textColor}`}>{skill.name}</span>
+                      </div>
+                      <span className="font-simple text-[8px] font-black text-blue-500/60">{skill.percentage}%</span>
+                    </div>
+                    <div className={`h-[2px] w-full rounded-full overflow-hidden ${isDark ? 'bg-white/5' : 'bg-blue-900/5'}`}>
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${skill.percentage}%` }}
+                        transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+                        className="h-full bg-blue-600 rounded-full"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Software Proficiency - MOVED LOWER */}
             <div className={`p-6 rounded-[35px] border ${isDark ? 'border-white/5 bg-white/[0.02]' : 'border-blue-50 bg-white'}`}>
               <p className="font-simple text-[8px] font-black uppercase tracking-[0.3em] opacity-30 mb-4 text-center">Software Arsenal</p>
               <div className="flex flex-wrap justify-center gap-2">
@@ -75,17 +127,6 @@ const AboutRoom: React.FC<AboutRoomProps> = ({ theme, onBack }) => {
                 ))}
               </div>
             </div>
-
-            {/* Download Button */}
-            <motion.a
-              href="#" 
-              whileHover={{ scale: 1.02, y: -2 }}
-              className={`flex items-center justify-center gap-3 w-full py-5 rounded-3xl font-simple text-[9px] font-black uppercase tracking-[0.4em] transition-all shadow-xl ${
-                isDark ? 'bg-white text-slate-950' : 'bg-slate-950 text-white'
-              }`}
-            >
-              Download Portfolio <Download size={14} />
-            </motion.a>
 
             {/* Hobbies & Values */}
             <div className={`p-7 rounded-[40px] border transition-all duration-500 ${isDark ? 'border-white/5 bg-blue-600/[0.03]' : 'border-blue-50 bg-blue-50/20'}`}>
@@ -190,7 +231,7 @@ const AboutRoom: React.FC<AboutRoomProps> = ({ theme, onBack }) => {
                 </div>
               </div>
 
-              {/* The DREAM Section - Stylized Visual Block */}
+              {/* The Vision Section - Stylized Visual Block */}
               <motion.div 
                 whileHover={{ y: -5 }}
                 className={`p-10 md:p-14 rounded-[55px] border-2 border-blue-600/20 bg-gradient-to-br ${isDark ? 'from-blue-600/10 to-transparent' : 'from-blue-50 to-white'} relative overflow-hidden`}
@@ -201,7 +242,7 @@ const AboutRoom: React.FC<AboutRoomProps> = ({ theme, onBack }) => {
                     <span className="font-simple text-[9px] font-black uppercase tracking-[0.5em] text-blue-600">The Vision</span>
                   </div>
                   <h3 className={`font-simple text-2xl md:text-3xl font-black uppercase tracking-tight leading-tight ${textColor}`}>
-                    "I would like to be able to use my work more and dream of owning a <span className="text-blue-600">big advertising and publishing company</span> in the future."
+                    "I would like to be able to use my work more and dream of owning a big advertising and publishing company in the future."
                   </h3>
                   <div className="h-[2px] w-24 bg-blue-600 rounded-full" />
                 </div>
@@ -210,24 +251,23 @@ const AboutRoom: React.FC<AboutRoomProps> = ({ theme, onBack }) => {
                 </div>
               </motion.div>
 
-              {/* The Satisfaction / Philosophy Section - Stylized Philosophy Block */}
+              {/* Final Statement / Ambition Section - Stylized Ambition Block */}
               <div className="py-16 border-t border-blue-600/10 flex flex-col items-center text-center">
                  <CheckCircle className="text-blue-600 mb-8 opacity-30" size={36} />
                  <p className={`font-simple text-xl md:text-2xl font-bold leading-relaxed max-w-3xl italic ${textColor}`}>
-                   "It doesn't matter where I work now or where I work in the future, but it is always important to be satisfied with others."
+                   "I would like to be able to use my work more and dream of owning a big advertising and publishing company in the future."
                  </p>
                  <div className="flex items-center gap-5 mt-10">
                    <div className="w-10 h-[1px] bg-blue-600/20" />
-                   <span className="font-simple text-[10px] font-black uppercase tracking-[0.6em] opacity-40">Core Philosophy</span>
+                   <span className="font-simple text-[10px] font-black uppercase tracking-[0.6em] opacity-40">Core Ambition</span>
                    <div className="w-10 h-[1px] bg-blue-600/20" />
                  </div>
               </div>
 
-              {/* FINAL SIGNATURE LOGO - Smaller and balanced capitalization */}
+              {/* FINAL SIGNATURE LOGO */}
               <div className="pt-20 pb-16">
                 <div className="flex flex-col items-center justify-center gap-6">
                   <div className="flex flex-col items-center text-center">
-                    {/* Updated to Barakat Qurtas with capitalized B and Q as requested */}
                     <span className="font-liana text-5xl md:text-6xl text-blue-600 leading-none tracking-tight">Barakat Qurtas</span>
                     <div className="h-[1px] w-12 bg-blue-600/30 mt-4 rounded-full" />
                   </div>
@@ -247,11 +287,7 @@ const AboutRoom: React.FC<AboutRoomProps> = ({ theme, onBack }) => {
         </div>
       </div>
 
-      <Footer theme={theme} setActiveRoom={(room) => {
-         const root = document.getElementById('root');
-         if (root) root.scrollTo({ top: 0, behavior: 'smooth' });
-         onBack();
-      }} />
+      <Footer theme={theme} setActiveRoom={onBack} />
     </motion.div>
   );
 };

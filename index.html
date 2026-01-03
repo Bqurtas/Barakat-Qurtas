@@ -4,12 +4,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Barakat Qurtas</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>Barakat Qurtas | Graphic Designer</title>
+    <meta name="title" content="Barakat Qurtas | Graphic Designer">
+    <meta name="description" content="Personal portfolio of Barakat Qurtas, specializing in Graphic Design, Printing, and Advertising. High-end visual architecture and branding.">
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bqurtas.com/">
+    <meta property="og:title" content="Barakat Qurtas | Graphic Designer">
+    <meta property="og:description" content="Expert Graphic Design, Printing, and Advertising portfolio showcasing visual excellence and professional branding.">
+    <meta property="og:image" content="https://i.ibb.co/SwbjDRf7/095-A7561-2.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://bqurtas.com/">
+    <meta property="twitter:title" content="Barakat Qurtas | Graphic Designer">
+    <meta property="twitter:description" content="Expert Graphic Design, Printing, and Advertising portfolio showcasing visual excellence and professional branding.">
+    <meta property="twitter:image" content="https://i.ibb.co/SwbjDRf7/095-A7561-2.png">
+
+    <!-- Preload the logo font as high priority -->
+    <link rel="preload" href="https://www.wfonts.com/data/2016/07/03/liana/Liana.otf" as="font" type="font/otf" crossorigin="anonymous" />
+    
     <!-- Favicon / Logo for Browser Tab -->
-    <link rel="icon" type="image/png" href="https://i.ibb.co/D3h6b89/Barakat-Qurtas.png" />
-    <!-- Preload critical assets for rocket-speed startup -->
-    <link rel="preload" href="https://i.ibb.co/LdXvxY3b/B0006.png" as="image" />
-    <link rel="preconnect" href="https://i.ibb.co" crossorigin />
+    <link rel="icon" type="image/png" href="https://i.imgur.com/W2o2C5Q.png" />
+    <link rel="apple-touch-icon" href="https://i.imgur.com/W2o2C5Q.png" />
+    <link rel="shortcut icon" href="https://i.imgur.com/W2o2C5Q.png" type="image/png" />
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -37,10 +59,11 @@
       }
     </script>
     <style>
+      /* Font display block prevents showing any fallback font before Liana loads */
       @font-face {
         font-family: 'Liana';
         src: url('https://www.wfonts.com/data/2016/07/03/liana/Liana.otf') format('opentype');
-        font-display: block; /* Avoid flash of unstyled text for the logo */
+        font-display: block;
       }
       
       html, body {
@@ -62,28 +85,20 @@
         background-color: #05070a;
         font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
         -webkit-font-smoothing: antialiased;
-        text-rendering: optimizeLegibility;
       }
 
-      .font-liana { font-family: 'Liana', serif; }
-      .font-cursive { font-family: 'Great Vibes', cursive; }
+      .font-liana { font-family: 'Liana', serif !important; }
       .font-simple { font-family: 'Plus Jakarta Sans', sans-serif; }
-      /* Montserrat replaced with Plus Jakarta Sans for consistency */
-      .font-arch { font-family: 'Plus Jakarta Sans', sans-serif; }
 
       section, footer {
         scroll-snap-align: start;
         scroll-snap-stop: always;
         min-height: 100vh;
         width: 100%;
-        margin: 0 !important;
         display: flex;
         flex-direction: column;
         justify-content: center;
         position: relative;
-        contain: content;
-        content-visibility: auto;
-        contain-intrinsic-size: 0 100vh;
       }
 
       @media (pointer: fine) {
@@ -108,32 +123,20 @@
         filter: blur(100px);
         opacity: 0.3;
         pointer-events: none;
-        will-change: transform;
       }
 
       .mesh-ball {
         position: absolute;
         border-radius: 50%;
         animation: mesh-move 20s infinite alternate ease-in-out;
-        will-change: transform;
-        backface-visibility: hidden;
       }
 
       @keyframes mesh-move {
         0% { transform: translate3d(0, 0, 0) scale(1); }
         100% { transform: translate3d(20%, 30%, 0) scale(1.5); }
       }
-
-      * {
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-      }
-
-      img {
-        content-visibility: auto;
-      }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;700;800&display=swap" rel="stylesheet">
     <script type="importmap">
     {
       "imports": {
@@ -150,7 +153,6 @@
     <div class="mesh-bg">
       <div class="mesh-ball w-[600px] h-[600px] bg-[#5D67E8]/20 top-[-10%] left-[-10%]"></div>
       <div class="mesh-ball w-[500px] h-[500px] bg-[#5D67E8]/10 bottom-[-10%] right-[-10%]" style="animation-delay: -5s;"></div>
-      <div class="mesh-ball w-[400px] h-[400px] bg-[#5D67E8]/5 top-[40%] left-[30%]" style="animation-delay: -10s;"></div>
     </div>
     <div id="root"></div>
   </body>

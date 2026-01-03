@@ -22,21 +22,44 @@ const App: React.FC = () => {
   const [activeRoom, setActiveRoom] = useState<'home' | 'about' | 'contact'>('home');
 
   useEffect(() => {
-    // Set to 2000ms (2s) for a premium yet fast introduction
     const timer = setTimeout(() => setLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
+  // Aggressive scroll reset helper
+  const forceScrollToTop = (instant: boolean = true) => {
     const rootElement = document.getElementById('root');
     if (!rootElement) return;
-    rootElement.style.scrollSnapType = activeRoom === 'home' ? 'y mandatory' : 'none';
+
+    if (instant) {
+      rootElement.style.scrollBehavior = 'auto';
+      rootElement.style.scrollSnapType = 'none';
+      rootElement.scrollTop = 0;
+      
+      // Re-enable behavior after a short frame to let the DOM settle
+      setTimeout(() => {
+        if (activeRoom === 'home') {
+          rootElement.style.scrollSnapType = 'y mandatory';
+        }
+        rootElement.style.scrollBehavior = 'smooth';
+      }, 50);
+    } else {
+      rootElement.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  // Sync scroll on room change
+  useEffect(() => {
+    forceScrollToTop(true);
   }, [activeRoom]);
 
   const handleSetActiveRoom = (room: 'home' | 'about' | 'contact') => {
-    if (room === activeRoom) return;
-    const rootElement = document.getElementById('root');
-    if (rootElement) rootElement.scrollTo({ top: 0, behavior: 'auto' });
+    if (room === activeRoom) {
+      forceScrollToTop(false); // Smooth scroll if already on the page
+      return;
+    }
+    
+    // For room changes, we let the useEffect handle the strict reset
     setActiveRoom(room);
   };
 
