@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -26,7 +25,7 @@ const Splash: React.FC = () => {
           }}
           className="text-center"
         >
-          <h1 className="font-liana text-4xl md:text-7xl text-white tracking-tight italic select-none drop-shadow-[0_0_40px_rgba(255,255,255,0.2)]">
+          <h1 className="font-liana text-[32px] md:text-7xl text-white tracking-tight italic select-none drop-shadow-[0_0_40px_rgba(255,255,255,0.2)]">
             Barakat Qurtas
           </h1>
           <motion.p 

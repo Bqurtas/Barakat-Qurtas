@@ -200,7 +200,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
                   <img src="https://i.ibb.co/D3h6b89/Barakat-Qurtas.png" className="w-full h-full object-cover" alt="Portrait" />
                 </div>
                 <div className="text-center flex flex-col items-center">
-                  <h2 className="font-liana text-4xl md:text-5xl text-blue-500 leading-none">Barakat Qurtas</h2>
+                  <h2 className="font-liana text-[32px] md:text-5xl text-blue-500 leading-none">Barakat Qurtas</h2>
                   <p className={`font-simple text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] mt-2 ${isDark ? 'opacity-40' : 'opacity-30'}`}>Graphic Designer</p>
                 </div>
               </motion.div>

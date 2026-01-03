@@ -161,7 +161,7 @@ const Footer: React.FC<FooterProps> = ({ theme, setActiveRoom }) => {
           {/* Copyright and Logo Area */}
           <div className={`pt-12 border-t ${borderColor} flex flex-col md:flex-row items-center justify-between gap-10`}>
             <div className="flex items-center gap-6">
-               <h3 className="font-liana text-5xl text-blue-500 cursor-pointer hover:scale-105 transition-transform" onClick={() => navigateTo('home')}>Bqurtas</h3>
+               <h3 className="font-liana text-[32px] md:text-5xl text-blue-500 cursor-pointer hover:scale-105 transition-transform" onClick={() => navigateTo('home')}>Bqurtas</h3>
                <div className={`h-8 w-[1px] ${borderColor}`} />
                <p className="font-simple text-[8px] font-black tracking-[0.3em] uppercase opacity-30">Graphic Designer</p>
             </div>
