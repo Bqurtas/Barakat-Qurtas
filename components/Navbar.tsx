@@ -96,7 +96,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
             isDark ? 'bg-slate-950/80' : 'bg-white/80'
           }`}
         >
-          <div className="flex items-center gap-2 md:gap-3 overflow-hidden">
+          <div className="flex items-center gap-2 md:gap-3 overflow-hidden h-full">
             <motion.div 
               layout
               onClick={() => setActiveRoom('home')}
@@ -112,18 +112,18 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
               />
             </motion.div>
             
-            <motion.div layout onClick={() => setActiveRoom('home')} className="flex flex-col min-w-0 cursor-pointer pt-1">
+            <motion.div layout onClick={() => setActiveRoom('home')} className="flex flex-col min-w-0 cursor-pointer justify-center pt-1.5 md:pt-2">
               <motion.span 
                 layout
-                className={`font-liana text-[32px] md:text-3xl leading-none transition-colors truncate ${isDark ? 'text-blue-500' : 'text-blue-600'}`}
+                className={`font-simple text-[5px] md:text-[7px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] leading-none mb-0.5 opacity-40 ${isDark ? 'text-white' : 'text-slate-900'}`}
               >
-                {scrolled ? 'Bqurtas' : 'Barakat Qurtas'}
+                {scrolled ? 'Designer' : 'Graphic Designer'}
               </motion.span>
               <motion.span 
                 layout
-                className={`font-simple text-[6px] md:text-[8px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] leading-none mt-0.5 ${isDark ? 'text-white/40' : 'text-slate-400'}`}
+                className={`font-liana text-[28px] md:text-3xl leading-[1.1] transition-colors truncate ${isDark ? 'text-blue-500' : 'text-blue-600'}`}
               >
-                {scrolled ? 'Designer' : 'Graphic Designer'}
+                {scrolled ? 'Bqurtas' : 'Barakat Qurtas'}
               </motion.span>
             </motion.div>
           </div>
@@ -199,9 +199,9 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
                 <div className={`w-20 h-20 md:w-28 md:h-28 rounded-full overflow-hidden border-4 ${isDark ? 'border-blue-500/20' : 'border-blue-500/10'} shadow-2xl`}>
                   <img src="https://i.ibb.co/D3h6b89/Barakat-Qurtas.png" className="w-full h-full object-cover" alt="Portrait" />
                 </div>
-                <div className="text-center flex flex-col items-center">
-                  <h2 className="font-liana text-[32px] md:text-5xl text-blue-500 leading-none">Barakat Qurtas</h2>
-                  <p className={`font-simple text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] mt-2 ${isDark ? 'opacity-40' : 'opacity-30'}`}>Graphic Designer</p>
+                <div className="text-center flex flex-col items-center pt-2">
+                  <h2 className="font-liana text-[32px] md:text-6xl text-blue-500 leading-tight mb-1">Barakat Qurtas</h2>
+                  <p className={`font-simple text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] ${isDark ? 'opacity-40' : 'opacity-30'}`}>Graphic Designer</p>
                 </div>
               </motion.div>
 

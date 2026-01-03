@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 const Splash: React.FC = () => {
   return (
@@ -23,16 +23,16 @@ const Splash: React.FC = () => {
             ease: [0.16, 1, 0.3, 1],
             delay: 0.5
           }}
-          className="text-center"
+          className="text-center flex flex-col items-center pt-4"
         >
-          <h1 className="font-liana text-[32px] md:text-7xl text-white tracking-tight italic select-none drop-shadow-[0_0_40px_rgba(255,255,255,0.2)]">
+          <h1 className="font-liana text-[32px] md:text-7xl text-white tracking-tight italic select-none drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] leading-tight">
             Barakat Qurtas
           </h1>
           <motion.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.35 }}
-            transition={{ delay: 1.5, duration: 2 }}
-            className="font-simple text-[11px] md:text-[13px] uppercase tracking-[0.8em] text-white mt-3 ml-2 font-light"
+            transition={{ delay: 1, duration: 2 }}
+            className="font-simple text-[10px] md:text-[12px] uppercase tracking-[0.8em] text-white ml-2 font-light mt-4"
           >
             Graphic Designer
           </motion.p>
