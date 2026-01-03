@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useInView, animate } from 'framer-motion';
 import { Theme } from '../types';
@@ -96,7 +95,7 @@ const LogoTicker: React.FC<LogoTickerProps> = ({ theme }) => {
   ];
 
   const isDark = theme === Theme.DARK;
-  const fadeColor = isDark ? 'from-[#0a0f14]' : 'from-[#f8fafc]';
+  const fadeColor = isDark ? 'from-[#0a0f14]' : 'from-[#F0EFEB]';
 
   return (
     <section id="collaborations" className="py-32 overflow-hidden relative flex flex-col justify-center min-h-screen">

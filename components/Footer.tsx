@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -23,7 +22,7 @@ interface FooterProps {
 
 const Footer: React.FC<FooterProps> = ({ theme, setActiveRoom }) => {
   const isDark = theme === Theme.DARK;
-  const bgColor = isDark ? 'bg-[#0a0f14]' : 'bg-[#f8fafc]';
+  const bgColor = isDark ? 'bg-[#0a0f14]' : 'bg-[#F0EFEB]';
   const borderColor = isDark ? 'border-slate-800/60' : 'border-blue-100/80';
   const textColor = isDark ? 'text-slate-100' : 'text-slate-900';
   const subTextColor = isDark ? 'text-slate-500' : 'text-slate-400';

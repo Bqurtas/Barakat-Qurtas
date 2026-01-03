@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import Splash from './components/Splash';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Portfolio from './components/Portfolio';
-import ClientsGrid from './components/ClientsGrid';
-import AboutPreview from './components/AboutPreview';
-import LogoTicker from './components/LogoTicker';
-import Footer from './components/Footer';
-import CustomCursor from './components/CustomCursor';
-import AboutRoom from './components/AboutRoom';
-import ContactRoom from './components/ContactRoom';
-import ScrollToTop from './components/ScrollToTop';
-import AdminTool from './components/AdminTool';
-import { Theme } from './types';
+import Splash from './components/Splash.tsx';
+import Navbar from './components/Navbar.tsx';
+import Hero from './components/Hero.tsx';
+import Portfolio from './components/Portfolio.tsx';
+import ClientsGrid from './components/ClientsGrid.tsx';
+import AboutPreview from './components/AboutPreview.tsx';
+import LogoTicker from './components/LogoTicker.tsx';
+import Footer from './components/Footer.tsx';
+import CustomCursor from './components/CustomCursor.tsx';
+import AboutRoom from './components/AboutRoom.tsx';
+import ContactRoom from './components/ContactRoom.tsx';
+import ScrollToTop from './components/ScrollToTop.tsx';
+import AdminTool from './components/AdminTool.tsx';
+import { Theme } from './types.ts';
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -25,32 +25,6 @@ const App: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // داینامیککردنی ئایکۆنی تابی براوسەر
-  useEffect(() => {
-    const updateFavicon = () => {
-      const favicon = document.querySelector("link[rel*='icon']") as HTMLLinkElement;
-      if (favicon) {
-        const isDarkTheme = theme === Theme.DARK;
-        
-        // ئەگەر مۆدی تاریک بوو، فلتەری 'invert' بەکاردێنین بۆ ئەوەی لۆگۆکە ببێتە سپی
-        // ئەگەر مۆدی ڕووناک بوو، وەک خۆی (تاریک) دەمێنێتەوە
-        const filter = isDarkTheme ? 'invert(1) brightness(1.5)' : 'none';
-        
-        const svgIcon = `
-          <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>
-            <image href='https://i.ibb.co/RTBdL0zx/2.png' width='32' height='32' style='filter: ${filter}' />
-          </svg>
-        `.trim();
-        
-        // گۆڕینی href بۆ SVG کە فلتەری تێدایە
-        favicon.href = `data:image/svg+xml;base64,${btoa(svgIcon)}`;
-      }
-    };
-
-    updateFavicon();
-  }, [theme]);
-
-  // Aggressive scroll reset helper
   const forceScrollToTop = (instant: boolean = true) => {
     const rootElement = document.getElementById('root');
     if (!rootElement) return;
@@ -60,7 +34,6 @@ const App: React.FC = () => {
       rootElement.style.scrollSnapType = 'none';
       rootElement.scrollTop = 0;
       
-      // Re-enable behavior after a short frame to let the DOM settle
       setTimeout(() => {
         if (activeRoom === 'home') {
           rootElement.style.scrollSnapType = 'y mandatory';
@@ -72,25 +45,22 @@ const App: React.FC = () => {
     }
   };
 
-  // Sync scroll on room change
   useEffect(() => {
     forceScrollToTop(true);
   }, [activeRoom]);
 
   const handleSetActiveRoom = (room: 'home' | 'about' | 'contact') => {
     if (room === activeRoom) {
-      forceScrollToTop(false); // Smooth scroll if already on the page
+      forceScrollToTop(false);
       return;
     }
-    
-    // For room changes, we let the useEffect handle the strict reset
     setActiveRoom(room);
   };
 
   const isDark = theme === Theme.DARK;
 
   return (
-    <div className={`${isDark ? 'bg-[#0a0f14] text-slate-100' : 'bg-[#f8fafc] text-slate-900'} transition-colors duration-700 min-h-screen selection:bg-blue-600 selection:text-white flex flex-col font-simple`}>
+    <div className={`${isDark ? 'bg-[#0a0f14] text-slate-100' : 'bg-[#F0EFEB] text-slate-900'} transition-colors duration-700 min-h-screen selection:bg-blue-600 selection:text-white flex flex-col font-simple`}>
       <AnimatePresence mode="wait">
         {loading && <Splash key="splash" />}
       </AnimatePresence>
