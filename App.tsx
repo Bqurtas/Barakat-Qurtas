@@ -21,7 +21,8 @@ const App: React.FC = () => {
   const [activeRoom, setActiveRoom] = useState<'home' | 'about' | 'contact'>('home');
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2000);
+    // گەڕاندنەوەی کاتی بارگاویبوون بۆ ٢.٥ چرکە وەک جاران بۆ ئەوەی لۆگۆکە جوان ببینرێت
+    const timer = setTimeout(() => setLoading(false), 2500);
     return () => clearTimeout(timer);
   }, []);
 

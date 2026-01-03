@@ -80,7 +80,7 @@ const Hero: React.FC<HeroProps> = ({ theme }) => {
 
       <div className="container mx-auto flex flex-col items-center justify-center relative z-10">
         
-        {/* Centered Image Container - Slightly Smaller for Better Balance */}
+        {/* Centered Image Container */}
         <motion.div
           style={{ x: imageX, y: imageY, rotate: 0 }}
           initial={{ opacity: 0, scale: 0.8, filter: 'blur(20px)', rotate: 0 }}
@@ -89,19 +89,15 @@ const Hero: React.FC<HeroProps> = ({ theme }) => {
           whileHover={{ scale: 1.02 }}
           className="relative z-10 mb-10 flex justify-center items-center"
         >
-          {/* 
-            Reduced width from 240/320 to 210/280 for a more refined aesthetic.
-            Kept aspect-[3/4] and rounded-full for the perfect pill shape.
-          */}
           <div className={`relative w-[210px] md:w-[280px] aspect-[3/4] rounded-full overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.5)] border transition-all duration-1000 ${isDark ? 'bg-slate-900 border-white/10' : 'bg-white border-blue-100'}`}>
             <img 
               src="https://i.ibb.co/SwbjDRf7/095-A7561-2.png" 
               alt="Barakat Qurtas" 
+              fetchpriority="high"
               className="w-full h-full object-cover block pointer-events-none select-none"
             />
           </div>
           
-          {/* Ambient Glow behind the image */}
           <div className={`absolute -inset-10 blur-[120px] -z-10 rounded-full transition-colors duration-1000 ${isDark ? 'bg-blue-600/20' : 'bg-blue-400/25'}`} />
         </motion.div>
 

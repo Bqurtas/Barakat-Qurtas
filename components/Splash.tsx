@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -13,7 +14,7 @@ const Splash: React.FC = () => {
       }}
       className="fixed inset-0 z-[100] flex items-center justify-center bg-[#05070a]"
     >
-      <div className="relative flex flex-col items-center gap-10 overflow-visible">
+      <div className="relative flex flex-col items-center gap-10">
         {/* Main Title Container */}
         <motion.div
           initial={{ opacity: 0, filter: "blur(20px)", y: 20 }}
@@ -23,9 +24,9 @@ const Splash: React.FC = () => {
             ease: [0.16, 1, 0.3, 1],
             delay: 0.5
           }}
-          className="text-center pt-10 overflow-visible"
+          className="text-center"
         >
-          <h1 className="font-liana text-[42px] md:text-7xl text-white tracking-tight italic select-none drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] overflow-visible block">
+          <h1 className="font-liana text-4xl md:text-7xl text-white tracking-tight italic select-none drop-shadow-[0_0_40px_rgba(255,255,255,0.2)]">
             Barakat Qurtas
           </h1>
           <motion.p 

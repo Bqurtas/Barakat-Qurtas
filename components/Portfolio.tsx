@@ -333,9 +333,9 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
                          <img 
                           src={item.image} 
                           alt={item.title} 
-                          loading="eager"
-                          fetchpriority={index < 8 ? "high" : "auto"}
-                          decoding="sync"
+                          loading={index < 4 ? "eager" : "lazy"}
+                          fetchpriority={index < 4 ? "high" : "auto"}
+                          decoding="async"
                           className="w-full h-full object-cover"
                          />
                          <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 opacity-40 pointer-events-none" />
@@ -350,9 +350,9 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
                       src={item.image} 
                       alt={item.title} 
                       draggable="false"
-                      loading="eager"
-                      fetchpriority={index < 12 ? "high" : "auto"}
-                      decoding="sync"
+                      loading={index < 6 ? "eager" : "lazy"}
+                      fetchpriority={index < 6 ? "high" : "auto"}
+                      decoding="async"
                       className={`${activeTab === 'Logo' ? 'w-full h-full object-contain p-2' : 'w-full h-auto object-cover'} transition-transform duration-500 group-hover:scale-105 pointer-events-none will-change-transform`} 
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 z-50">
