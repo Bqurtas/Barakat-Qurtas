@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sun, Moon, Instagram, Linkedin, Twitter, X, Menu, Facebook, Youtube, Music, MessageCircle } from 'lucide-react';
-import { Theme } from '../types';
+import { Theme } from '../types.ts';
 
 interface NavbarProps {
   theme: Theme;
@@ -186,7 +186,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
           >
             <motion.button 
               onClick={() => setIsMenuOpen(false)}
-              whileHover={{ rotate: 90, scale: 1.1, backgroundColor: '#ef4444', color: '#fff' }}
+              whileHover={{ rotate: 90, scale: 1.1 }}
               className={`absolute top-10 right-10 w-12 h-12 md:w-14 md:h-14 border rounded-full flex items-center justify-center transition-all z-20 ${
                 isDark ? 'border-white/10 text-white' : 'border-slate-900/10 text-slate-900'
               }`}
