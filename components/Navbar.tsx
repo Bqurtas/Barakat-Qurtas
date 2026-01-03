@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sun, Moon, Instagram, Linkedin, Twitter, X, Menu, Facebook, Youtube, Music, MessageCircle } from 'lucide-react';
@@ -113,7 +112,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
               />
             </motion.div>
             
-            <motion.div layout onClick={() => setActiveRoom('home')} className="flex flex-col -gap-1 min-w-0 cursor-pointer">
+            <motion.div layout onClick={() => setActiveRoom('home')} className="flex flex-col min-w-0 cursor-pointer pt-1">
               <motion.span 
                 layout
                 className={`font-liana text-lg md:text-3xl leading-none transition-colors truncate ${isDark ? 'text-blue-500' : 'text-blue-600'}`}
@@ -122,7 +121,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
               </motion.span>
               <motion.span 
                 layout
-                className={`font-simple text-[6px] md:text-[8px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] ml-0.5 md:ml-1 ${isDark ? 'text-white/40' : 'text-slate-400'}`}
+                className={`font-simple text-[6px] md:text-[8px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] leading-none mt-0.5 ${isDark ? 'text-white/40' : 'text-slate-400'}`}
               >
                 {scrolled ? 'Designer' : 'Graphic Designer'}
               </motion.span>
@@ -200,7 +199,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
                 <div className={`w-20 h-20 md:w-28 md:h-28 rounded-full overflow-hidden border-4 ${isDark ? 'border-blue-500/20' : 'border-blue-500/10'} shadow-2xl`}>
                   <img src="https://i.ibb.co/D3h6b89/Barakat-Qurtas.png" className="w-full h-full object-cover" alt="Portrait" />
                 </div>
-                <div className="text-center">
+                <div className="text-center flex flex-col items-center">
                   <h2 className="font-liana text-3xl md:text-5xl text-blue-500 leading-none">Barakat Qurtas</h2>
                   <p className={`font-simple text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] mt-2 ${isDark ? 'opacity-40' : 'opacity-30'}`}>Graphic Designer</p>
                 </div>

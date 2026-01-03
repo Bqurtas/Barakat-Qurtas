@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Splash from './components/Splash';
@@ -25,6 +24,31 @@ const App: React.FC = () => {
     const timer = setTimeout(() => setLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  // داینامیککردنی ئایکۆنی تابی براوسەر
+  useEffect(() => {
+    const updateFavicon = () => {
+      const favicon = document.querySelector("link[rel*='icon']") as HTMLLinkElement;
+      if (favicon) {
+        const isDarkTheme = theme === Theme.DARK;
+        
+        // ئەگەر مۆدی تاریک بوو، فلتەری 'invert' بەکاردێنین بۆ ئەوەی لۆگۆکە ببێتە سپی
+        // ئەگەر مۆدی ڕووناک بوو، وەک خۆی (تاریک) دەمێنێتەوە
+        const filter = isDarkTheme ? 'invert(1) brightness(1.5)' : 'none';
+        
+        const svgIcon = `
+          <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>
+            <image href='https://i.ibb.co/RTBdL0zx/2.png' width='32' height='32' style='filter: ${filter}' />
+          </svg>
+        `.trim();
+        
+        // گۆڕینی href بۆ SVG کە فلتەری تێدایە
+        favicon.href = `data:image/svg+xml;base64,${btoa(svgIcon)}`;
+      }
+    };
+
+    updateFavicon();
+  }, [theme]);
 
   // Aggressive scroll reset helper
   const forceScrollToTop = (instant: boolean = true) => {
