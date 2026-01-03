@@ -115,7 +115,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, setActiveRoom, acti
             <motion.div layout onClick={() => setActiveRoom('home')} className="flex flex-col min-w-0 cursor-pointer pt-1">
               <motion.span 
                 layout
-                className={`font-liana text-2xl md:text-3xl leading-none transition-colors truncate ${isDark ? 'text-blue-500' : 'text-blue-600'}`}
+                className={`font-liana text-[32px] md:text-3xl leading-none transition-colors truncate ${isDark ? 'text-blue-500' : 'text-blue-600'}`}
               >
                 {scrolled ? 'Bqurtas' : 'Barakat Qurtas'}
               </motion.span>
