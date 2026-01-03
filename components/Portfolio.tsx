@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -53,9 +52,10 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
   const displayedItems = filteredItems.slice(0, visibleCount);
   const hasMore = filteredItems.length > visibleCount;
 
+  // Background preloading for hovered tabs - Rocket Speed technique
   useEffect(() => {
     if (hoveredTab && !preloadedTabs.current.has(hoveredTab)) {
-      const itemsToPreload = MY_WORKS_DATA.filter(item => item.category === hoveredTab).slice(0, 10);
+      const itemsToPreload = MY_WORKS_DATA.filter(item => item.category === hoveredTab).slice(0, 15);
       itemsToPreload.forEach(item => {
         const img = new Image();
         img.src = item.image;
@@ -63,6 +63,21 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
       preloadedTabs.current.add(hoveredTab);
     }
   }, [hoveredTab]);
+
+  // Preload next category images during idle time
+  useEffect(() => {
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(() => {
+        const nextCats = [...TOP_CATEGORIES, ...BOTTOM_CATEGORIES].map(c => c.name).filter(n => n !== activeTab);
+        nextCats.slice(0, 2).forEach(cat => {
+          MY_WORKS_DATA.filter(item => item.category === cat).slice(0, 6).forEach(item => {
+            const img = new Image();
+            img.src = item.image;
+          });
+        });
+      });
+    }
+  }, [activeTab]);
 
   const handleLoadMore = () => {
     setVisibleCount(prev => prev + 12);
@@ -333,9 +348,9 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
                          <img 
                           src={item.image} 
                           alt={item.title} 
-                          loading={index < 4 ? "eager" : "lazy"}
-                          fetchpriority={index < 4 ? "high" : "auto"}
-                          decoding="async"
+                          loading={index < 8 ? "eager" : "lazy"}
+                          fetchpriority={index < 8 ? "high" : "auto"}
+                          decoding={index < 8 ? "sync" : "async"}
                           className="w-full h-full object-cover"
                          />
                          <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 opacity-40 pointer-events-none" />
@@ -350,9 +365,9 @@ const Portfolio: React.FC<PortfolioProps> = ({ theme }) => {
                       src={item.image} 
                       alt={item.title} 
                       draggable="false"
-                      loading={index < 6 ? "eager" : "lazy"}
-                      fetchpriority={index < 6 ? "high" : "auto"}
-                      decoding="async"
+                      loading={index < 12 ? "eager" : "lazy"}
+                      fetchpriority={index < 12 ? "high" : "auto"}
+                      decoding={index < 12 ? "sync" : "async"}
                       className={`${activeTab === 'Logo' ? 'w-full h-full object-contain p-2' : 'w-full h-auto object-cover'} transition-transform duration-500 group-hover:scale-105 pointer-events-none will-change-transform`} 
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 z-50">

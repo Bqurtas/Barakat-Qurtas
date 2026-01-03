@@ -79,6 +79,7 @@
         margin: 0;
         padding: 0;
         overflow: hidden;
+        image-rendering: -webkit-optimize-contrast; /* خێراکردنی ڕێندەری وێنە */
       }
 
       #root {
@@ -93,6 +94,7 @@
         background-color: #0a0f14;
         font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
         -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
       }
 
       .font-liana { 
@@ -110,6 +112,7 @@
         flex-direction: column;
         justify-content: center;
         position: relative;
+        will-change: transform; /* ئامادەکردنی کارت گرافیک */
       }
 
       @media (pointer: fine) {
