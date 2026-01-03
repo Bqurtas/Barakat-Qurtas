@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 
 const Splash: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const Splash: React.FC = () => {
       }}
       className="fixed inset-0 z-[100] flex items-center justify-center bg-[#05070a]"
     >
-      <div className="relative flex flex-col items-center gap-10">
+      <div className="relative flex flex-col items-center gap-10 overflow-visible">
         {/* Main Title Container */}
         <motion.div
           initial={{ opacity: 0, filter: "blur(20px)", y: 20 }}
@@ -23,16 +23,16 @@ const Splash: React.FC = () => {
             ease: [0.16, 1, 0.3, 1],
             delay: 0.5
           }}
-          className="text-center flex flex-col items-center pt-4"
+          className="text-center pt-10 overflow-visible"
         >
-          <h1 className="font-liana text-[32px] md:text-7xl text-white tracking-tight italic select-none drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] leading-tight">
+          <h1 className="font-liana text-[42px] md:text-7xl text-white tracking-tight italic select-none drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] overflow-visible block">
             Barakat Qurtas
           </h1>
           <motion.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.35 }}
-            transition={{ delay: 1, duration: 2 }}
-            className="font-simple text-[10px] md:text-[12px] uppercase tracking-[0.8em] text-white ml-2 font-light mt-4"
+            transition={{ delay: 1.5, duration: 2 }}
+            className="font-simple text-[11px] md:text-[13px] uppercase tracking-[0.8em] text-white mt-3 ml-2 font-light"
           >
             Graphic Designer
           </motion.p>
